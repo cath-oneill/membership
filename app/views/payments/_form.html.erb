@@ -21,7 +21,12 @@
   </div>
   <div class="field">
     <%= f.label "Type:" %><br>
-    <%= f.text_field :kind %>
+    <%= f.select :kind, options_for_select([
+        ["Please select:", "no selection"],
+        ["Cash", "cash"],
+        ["Check", "check"],
+        ["Other", "other"] ], f.object.kind
+      ) %>
   </div>
   <div class="actions">
     <%= f.submit %>

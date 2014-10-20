@@ -7,12 +7,12 @@
 
 <p>
   <strong>Amount:</strong>
-  <%= @payment.amount %>
+  $<%= @payment.amount %>
 </p>
 
 <p>
   <strong>Type:</strong>
-  <%= @payment.kind %>
+  <%= @payment.kind.capitalize %>
 </p>
 
 <%= link_to 'Edit', edit_payment_path(@payment) %> |

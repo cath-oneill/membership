@@ -14,11 +14,10 @@
     <% @payments.each do |payment| %>
       <tr>
         <td><%= payment.date %></td>
-        <td><%= payment.amount %></td>
-        <td><%= payment.kind %></td>
+        <td>$<%= payment.amount %></td>
+        <td><%= payment.kind.capitalize %></td>
         <td><%= link_to 'Show', payment %></td>
         <td><%= link_to 'Edit', edit_payment_path(payment) %></td>
-        <td><%= link_to 'Destroy', payment, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
   </tbody>

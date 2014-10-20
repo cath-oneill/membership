@@ -1,45 +1,42 @@
 class PaymentsController < ApplicationController
-  before_action :set_payment, only: [:show, :edit, :update, :destroy]
+  before_action :set_payment, only: [:edit, :update, :destroy]
+  before_action :set_member, only: [:new, :edit, :create, :update]
 
   # GET /payments
   def index
     @payments = Payment.all
   end
 
-  # GET /payments/1
-  def show
-  end
-
-  # GET /payments/new
+  # GET members/:member_id/payments/new
   def new
     @payment = Payment.new
   end
 
-  # GET /payments/1/edit
+  # GET members/:member_id/payments/1/edit
   def edit
   end
 
-  # POST /payments
+  # POST members/:member_id/payments
   def create
     @payment = Payment.new(payment_params)
-
+    @payment.member_id = @member.id
     if @payment.save
-      redirect_to @payment, notice: 'Payment was successfully created.'
+      redirect_to payments_path, notice: 'Payment was successfully created.'
     else
-      render :new
+      render new_member_payment_path
     end
   end
 
-  # PATCH/PUT /payments/1
+  # PATCH/PUT members/:member_id/payments/1
   def update
     if @payment.update(payment_params)
-      redirect_to @payment, notice: 'Payment was successfully updated.'
+      redirect_to payments_path, notice: 'Payment was successfully updated.'
     else
-      render :edit
+      render edit_member_payment_path
     end
   end
 
-  # DELETE /payments/1
+  # DELETE members/:member_id/payments/1
   def destroy
     @payment.destroy
     redirect_to payments_url, notice: 'Payment was successfully destroyed.'
@@ -51,6 +48,9 @@ class PaymentsController < ApplicationController
       @payment = Payment.find(params[:id])
     end
 
+    def set_member
+      @member = Member.find(params[:member_id])
+    end
     # Only allow a trusted parameter "white list" through.
     def payment_params
       params.require(:payment).permit(:date, :amount, :kind)

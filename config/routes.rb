@@ -8,7 +8,7 @@ Rails.application.routes.draw do
 
   resources :admin, only: [:index, :create, :destroy]
   
-  resources :members do
+  resources :members, except: [:destroy] do
     resources :payments, only: [:new, :create, :edit, :update, :destroy]
   end
 

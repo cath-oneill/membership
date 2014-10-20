@@ -37,8 +37,9 @@ ActiveRecord::Schema.define(version: 20141020150413) do
 
   create_table "payments", force: true do |t|
     t.date     "date"
-    t.integer  "amount_cents"
-    t.string   "type"
+    t.integer  "amount_cents",    default: 0,     null: false
+    t.string   "amount_currency", default: "USD", null: false
+    t.string   "kind"
     t.integer  "member_id"
     t.datetime "created_at"
     t.datetime "updated_at"

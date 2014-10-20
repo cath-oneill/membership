@@ -5,6 +5,8 @@ class CreatePayments < ActiveRecord::Migration
       t.integer :amount_cents
       t.string :type
 
+      t.belongs_to :member
+
       t.timestamps
     end
   end

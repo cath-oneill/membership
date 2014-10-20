@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :members
+
   root 'welcome#index'
   devise_for :users, :skip => [:registrations]
   as :user do

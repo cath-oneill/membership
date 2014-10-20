@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   resources :payments
-
   resources :members
+  resources :admin, only: [:index, :create, :destroy]
 
   root 'members#index'
   devise_for :users, :skip => [:registrations]

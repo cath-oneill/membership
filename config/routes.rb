@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   resources :members
 
-  root 'welcome#index'
+  root 'members#index'
   devise_for :users, :skip => [:registrations]
   as :user do
     get 'users/edit' => 'devise/registrations#edit', :as => 'edit_user_registration'

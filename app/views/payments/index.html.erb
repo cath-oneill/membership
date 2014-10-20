@@ -7,6 +7,7 @@
       <th>Member</th>
       <th>Amount</th>
       <th>Type</th>
+      <th>Note</th>
       <th colspan="2"></th>
     </tr>
   </thead>
@@ -19,6 +20,7 @@
         <td><%= member.first_name %> <%= member.last_name %></td>
         <td>$<%= payment.amount %></td>
         <td><%= payment.kind.capitalize %></td>
+        <td><%= payment.note %></td>
         <td><%= link_to 'Edit', edit_member_payment_path(member, payment) %></td>
         <td><%= link_to 'Member Info', member_path(member) %></td>
       </tr>

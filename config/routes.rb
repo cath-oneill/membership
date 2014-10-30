@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
+
   root 'members#index'
+
   devise_for :users, :skip => [:registrations]
   as :user do
     get 'users/edit' => 'devise/registrations#edit', :as => 'edit_user_registration'
@@ -10,6 +12,7 @@ Rails.application.routes.draw do
   
   resources :members, except: [:destroy] do
     resources :payments, only: [:new, :create, :edit, :update, :destroy]
+    resources :notes, only: [:new, :create, :edit, :update]
   end
 
   resources :payments, only: [:index]

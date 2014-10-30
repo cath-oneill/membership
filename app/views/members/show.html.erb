@@ -84,17 +84,39 @@
 
   <tbody>
     <% @member.payments.each do |payment| %>
-    <% member = Member.find(payment.member_id) %>
       <tr>
         <td><%= payment.date %></td>
         <td>$<%= payment.amount %></td>
         <td><%= payment.kind.capitalize %></td>
         <td><%= payment.note %></td>
-        <td><%= link_to 'Edit Payment', edit_member_payment_path(member, payment) %></td>
+        <td><%= link_to 'Edit Payment', edit_member_payment_path(@member, payment) %></td>
       </tr>
     <% end %>
   </tbody>
 </table>
 
+<h1><%= @member.first_name %>'s Notes:</h1>
+<table>
+  <thead>
+    <tr>
+      <th>Content</th>
+      <th>Date</th>
+      <th colspan="1"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @member.notes.each do |note| %>
+      <tr>
+        <td><%= note.content %></td>
+        <td><%= note.date %></td>
+        <td><%= link_to 'Edit', edit_member_note_path(@member, note) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+
 <%= link_to 'Edit Member Information', edit_member_path(@member) %> |
-<%= link_to 'Add New Payment', new_member_payment_path(@member) %>
+<%= link_to 'Add New Payment', new_member_payment_path(@member) %> |
+<%= link_to 'Add New Note', new_member_note_path(@member) %>

@@ -1,5 +1,6 @@
 class Member < ActiveRecord::Base
   has_many :payments
+  has_many :notes
 
   def current_member?(date_string = nil)
     date = set_date(date_string)

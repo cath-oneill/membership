@@ -34,7 +34,7 @@
         <td><%= member.employer %></td>
         <td><%= member.occupation %></td>
         <td><%= member.title %></td>
-        <td><%= link_to 'Show', member %></td>
+        <td><%= link_to 'Show', member_path(member) %></td>
         <td><%= link_to 'Edit', edit_member_path(member) %></td>
       </tr>
     <% end %>

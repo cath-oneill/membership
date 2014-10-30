@@ -7,14 +7,7 @@
       <th>Last name</th>
       <th>Address</th>
       <th>Zip</th>
-      <th>Email</th>
-      <th>Email 2</th>
-      <th>Cell phone</th>
-      <th>Home phone</th>
-      <th>Work phone</th>
-      <th>Employer</th>
-      <th>Occupation</th>
-      <th>Title</th>
+      <th>Membership Status</th>
       <th colspan="2"></th>
     </tr>
   </thead>
@@ -26,14 +19,13 @@
         <td><%= member.last_name %></td>
         <td><%= member.address %></td>
         <td><%= member.zip %></td>
-        <td><%= member.email %></td>
-        <td><%= member.email2 %></td>
-        <td><%= member.cell_phone %></td>
-        <td><%= member.home_phone %></td>
-        <td><%= member.work_phone %></td>
-        <td><%= member.employer %></td>
-        <td><%= member.occupation %></td>
-        <td><%= member.title %></td>
+        <% if member.current_member? %>
+          <td>Current Member, expires <%= member.expiration_date %></td>
+        <% elsif member.paid_within_three_years? %>
+          <td>Former Member, within 2 years</td>
+        <% else %>
+          <td>Inactive Membership</td>
+        <% end %>
         <td><%= link_to 'Show', member_path(member) %></td>
         <td><%= link_to 'Edit', edit_member_path(member) %></td>
       </tr>

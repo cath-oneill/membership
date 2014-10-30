@@ -7,9 +7,13 @@ class Member < ActiveRecord::Base
     self.payments.where(date: date-365..date).present?
   end
 
-  def paid_within_two_years?(date_string = nil)
+  def paid_within_three_years?(date_string = nil)
     date = set_date(date_string)
-    self.payments.where(date: date-730..date).present?
+    self.payments.where(date: date-1096..date).present?
+  end
+
+  def expiration_date
+    self.payments.order(:date).last.date + 365
   end
 
   private

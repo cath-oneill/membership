@@ -32,28 +32,24 @@
               <li><%= link_to "Logout", destroy_user_session_path, method: :delete, :class => ''  %></li>
             </ul>
           </li>
-
           <li><%= link_to 'Members', members_path, :class => '' %></li>
           <li><%= link_to "Payments", payments_path, :class => ''  %></li>
           <li><%= link_to "Admin", admin_index_path, :class => ''  %></li>
-
-
       </section>
     </nav>
-      
-    <% else %>
-    <p class="navbar-text pull-right">
-      <%= link_to "Login", new_user_session_path, :class => 'navbar-link'  %>
-    </p>
     <% end %>
 
-    <% if notice %>
-      <p class="alert alert-success"><%= notice %></p>
-    <% end %>
-    <% if alert %>
-      <p class="alert alert-danger"><%= alert %></p>
-    <% end %>
-    <%= yield %>
+    <div class="row">
+      <div class="columns small-12">
+        <% if notice %>
+          <p class="alert alert-success"><%= notice %></p>
+        <% end %>
+        <% if alert %>
+          <p class="alert alert-danger"><%= alert %></p>
+        <% end %>
+        <%= yield %>
+      </div>
+    </div>
     <%= javascript_include_tag "application" %>
   </body>
 </html>

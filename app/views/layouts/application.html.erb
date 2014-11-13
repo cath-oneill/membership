@@ -39,17 +39,27 @@
     </nav>
     <% end %>
 
-    <div class="row">
-      <div class="columns small-12">
         <% if notice %>
-          <p class="alert alert-success"><%= notice %></p>
+        <div class="row">
+          <div class="columns small-12">
+            <p class="alert-box success round"><%= notice %></p>
+          </div>
+        </div>
         <% end %>
         <% if alert %>
-          <p class="alert alert-danger"><%= alert %></p>
+        <div class="row">
+          <div class="columns small-12">
+              <p class="alert-box alert round"><%= alert %></p>
+          </div>         
+        </div>
         <% end %>
+
+    <div class="row">
+      <div class="columns small-12">
         <%= yield %>
       </div>
     </div>
+    
     <%= javascript_include_tag "application" %>
   </body>
 </html>

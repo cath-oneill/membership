@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <title><%= content_for?(:title) ? yield(:title) : "foundation-rails" %></title>
+    <title>Club Membership</title>
 
     <%= stylesheet_link_tag    "application" %>
     <%= javascript_include_tag "vendor/modernizr" %>
@@ -12,15 +12,40 @@
   </head>
 
   <body>
-    <p class="navbar-text pull-right">
     <% if user_signed_in? %>
-      Logged in as <strong><%= current_user.email %></strong>.
-      <%= link_to 'Edit profile', edit_user_registration_path, :class => 'navbar-link' %> |
-      <%= link_to "Logout", destroy_user_session_path, method: :delete, :class => 'navbar-link'  %>
+    <nav class="top-bar" data-topbar role="navigation">
+      <ul class="title-area">
+        <li class="name">
+          <h1><a href="#">Club Membership</a></h1>
+        </li>
+         <!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone -->
+        <li class="toggle-topbar menu-icon"><a href="#"><span>Menu</span></a></li>
+      </ul>
+
+      <section class="top-bar-section">
+        <!-- Right Nav Section -->
+        <ul class="right">
+          <li class="has-dropdown">
+            <a href="#">Logged in as <%= current_user.email %>.</a>
+            <ul class="dropdown">
+              <li><%= link_to 'Update Password', edit_user_registration_path, :class => '' %></li>
+              <li><%= link_to "Logout", destroy_user_session_path, method: :delete, :class => ''  %></li>
+            </ul>
+          </li>
+
+          <li><%= link_to 'Members', members_path, :class => '' %></li>
+          <li><%= link_to "Payments", payments_path, :class => ''  %></li>
+          <li><%= link_to "Admin", admin_index_path, :class => ''  %></li>
+
+
+      </section>
+    </nav>
+      
     <% else %>
+    <p class="navbar-text pull-right">
       <%= link_to "Login", new_user_session_path, :class => 'navbar-link'  %>
-    <% end %>
     </p>
+    <% end %>
 
     <% if notice %>
       <p class="alert alert-success"><%= notice %></p>

@@ -31,6 +31,8 @@ gem 'spring',        group: :development
 
 gem 'devise'
 
+gem 'filterrific'
+
 
 group :development do
   gem 'better_errors'

@@ -4,7 +4,9 @@ class MembersController < ApplicationController
   # GET /members
   # GET /members.json
   def index
-    @members = Member.all
+    @filterrific = Filterrific.new(Member, params[:filterrific])
+    @members = Member.filterrific_find(@filterrific) #.page(params[:page])
+    #@members = Member.all
   end
 
   # GET /members/1

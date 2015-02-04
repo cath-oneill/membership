@@ -1,0 +1,43 @@
+<%# app/views/students/_list.html.erb %>
+<div id="filterrific_results">
+
+  <div>
+    <%= page_entries_info members %>
+  </div>
+
+
+  <table>
+    <thead>
+      <tr>
+        <th>First name</th>
+        <th>Last name</th>
+        <th>Address</th>
+        <th>Zip</th>
+        <th>Membership Status</th>
+        <th colspan="2"></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @members.each do |member| %>
+        <tr>
+          <td><%= member.first_name %></td>
+          <td><%= member.last_name %></td>
+          <td><%= member.address %></td>
+          <td><%= member.zip %></td>
+          <% if member.current_member? %>
+            <td>Current Member, expires <%= member.expiration_date %></td>
+          <% elsif member.paid_within_three_years? %>
+            <td>Former Member, within 2 years</td>
+          <% else %>
+            <td>Inactive Membership</td>
+          <% end %>
+          <td><%= link_to 'Show', member_path(member) %></td>
+          <td><%= link_to 'Edit', edit_member_path(member) %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<%= will_paginate members %>

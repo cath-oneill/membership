@@ -13,6 +13,7 @@
 
   <body>
     <% if user_signed_in? %>
+    <div class="contain-to-grid">
     <nav class="top-bar" data-topbar role="navigation">
       <ul class="title-area">
         <li class="name">
@@ -37,6 +38,7 @@
           <li><%= link_to "Admin", admin_index_path, :class => ''  %></li>
       </section>
     </nav>
+    </div>
     <% end %>
 
         <% if notice %>

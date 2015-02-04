@@ -2,9 +2,12 @@ class Member < ActiveRecord::Base
   has_many :payments
   has_many :notes
 
+  scope :last_dues, lambda { joins(:payments).where("payments.date = (SELECT MAX(payments.date) FROM payments WHERE payments.member_id = members.id)") }
+
+
   filterrific(
-    default_settings: { sorted_by: 'name_desc' },
-    filter_names: [
+    default_filter_params: { sorted_by: 'name_asc' },
+    available_filters: [
       :search_query,
       :sorted_by
       # :with_country_id,
@@ -12,12 +15,17 @@ class Member < ActiveRecord::Base
     ]
   )
 
+  # default for will_paginate
+  self.per_page = 10
+
+  scope :last_payment, joins(:payments)
+
   scope :sorted_by, lambda { |sort_option|
     # extract the sort direction from the param value.
     direction = (sort_option =~ /desc$/) ? 'desc' : 'asc'
     case sort_option.to_s
-    when /^membership_ends_/
-      order("members.expiration_date #{ direction }")
+    when /^last_dues_paid_/
+      Member.last_dues
     when /^name_/
       order("LOWER(members.last_name) #{ direction }, LOWER(members.first_name) #{ direction }")
     else
@@ -37,15 +45,10 @@ class Member < ActiveRecord::Base
     # configure number of OR conditions for provision
     # of interpolation arguments. Adjust this if you
     # change the number of OR conditions.
-    num_or_conditions = 3
+    num_or_conditions = 2
     where(
-      terms.map {
-        or_clauses = [
-          "LOWER(members.first_name) LIKE ?",
-          "LOWER(members.last_name) LIKE ?",
-          "LOWER(members.email) LIKE ?"
-        ].join(' OR ')
-        "(#{ or_clauses })"
+      terms.map { |term|
+          "(LOWER(members.first_name) LIKE ? OR LOWER(members.last_name) LIKE ?)"
       }.join(' AND '),
       *terms.map { |e| [e] * num_or_conditions }.flatten
     )
@@ -64,6 +67,14 @@ class Member < ActiveRecord::Base
   def expiration_date
     self.payments.order(:date).last.date + 365
   end
+
+  def self.options_for_sorted_by
+    [
+      ['Last Name (a-z)', 'name_asc'],
+      ['Last Name (z-a)', 'name_desc'],
+      ['Dues Last Paid', 'last_dues_paid_asc']
+    ]
+  end  
 
   private
 

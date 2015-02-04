@@ -4,15 +4,18 @@ class MembersController < ApplicationController
   # GET /members
   # GET /members.json
   def index
-    @filterrific = Filterrific.new(Member, params[:filterrific])
-    @members = Member.filterrific_find(@filterrific) #.page(params[:page])
-    #@members = Member.all
+    @filterrific = initialize_filterrific(
+      Member,
+      params[:filterrific],
+      :select_options => {
+        sorted_by: Member.options_for_sorted_by
+      })
+    @members = @filterrific.find.page(params[:page])
   end
 
   # GET /members/1
   # GET /members/1.json
   def show
-    #raise 'x'
   end
 
   # GET /members/new

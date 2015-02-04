@@ -1,0 +1,27 @@
+<h1>Listing members</h1>
+
+<div class="row">
+<%= form_for_filterrific @filterrific do |f| %>
+  <div class = "small-3 columns">
+    Search
+    <%= f.text_field(:search_query) %>
+  </div>
+  <div class = "small-3 columns">
+    Sorted by
+    <%= f.select(:sorted_by, @filterrific.select_options[:sorted_by]) %>
+  </div>  
+  <%# add an automated spinner to your form when the list is refreshed %>
+  <%= render_filterrific_spinner %>
+<% end %>
+</div>
+
+<%= render(
+  partial: 'members/list',
+  locals: { members: @members }
+) %>
+
+<%= p params %>
+
+<br>
+
+<%= link_to 'New Member', new_member_path %>

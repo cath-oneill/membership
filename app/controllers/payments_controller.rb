@@ -21,7 +21,7 @@ class PaymentsController < ApplicationController
     @payment = Payment.new(payment_params)
     @payment.member_id = @member.id
     if @payment.save
-      redirect_to payments_path, notice: 'Payment was successfully created.'
+      redirect_to member_path(@member), notice: 'Payment was successfully created.'
     else
       render new_member_payment_path
     end
@@ -53,6 +53,6 @@ class PaymentsController < ApplicationController
     end
     # Only allow a trusted parameter "white list" through.
     def payment_params
-      params.require(:payment).permit(:date, :amount, :kind, :note)
+      params.require(:payment).permit(:date, :amount, :dues, :note)
     end
 end

@@ -76,7 +76,7 @@
     <tr>
       <th>Date</th>
       <th>Amount</th>
-      <th>Type</th>
+      <th>Dues?</th>
       <th>Note</th>
       <th colspan="1"></th>
     </tr>
@@ -87,7 +87,12 @@
       <tr>
         <td><%= payment.date %></td>
         <td>$<%= payment.amount %></td>
-        <td><%= payment.kind.capitalize %></td>
+        <td><% if payment.dues %>
+              <%= "YES" %>
+            <% else %>
+              <%= "NO" %>
+            <% end %>
+        </td>
         <td><%= payment.note %></td>
         <td><%= link_to 'Edit Payment', edit_member_payment_path(@member, payment) %></td>
       </tr>

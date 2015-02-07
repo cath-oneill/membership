@@ -4,7 +4,15 @@ class PaymentsController < ApplicationController
 
   # GET /payments
   def index
-    @payments = Payment.all
+    p params
+    @filterrific = initialize_filterrific(
+      Payment,
+      params[:filterrific],
+      :select_options => {
+        sorted_by: Payment.options_for_sorted_by,
+        by_dues: Payment.options_for_dues_select
+      }) or return
+    @payments = @filterrific.find.page(params[:page])
   end
 
   # GET members/:member_id/payments/new

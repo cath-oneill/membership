@@ -55,9 +55,18 @@ class Member < ActiveRecord::Base
     where('members.dues_paid >= ?', ref_date)
   }
 
-  scope :by_zip_code, lambda { |zips|
-    where(zip: [*zips.to_s])
+  scope :by_zip_code, lambda { |zip|
+    where(zip: zip.to_s)
   }
+
+  def self.to_csv
+    CSV.generate do |csv|
+      csv << column_names
+      all.each do |member|
+        csv << member.attributes.values_at(*column_names)
+      end
+    end
+  end
 
   def self.options_for_zip_select
     pluck(:zip).uniq.map { |e| [e, e] }

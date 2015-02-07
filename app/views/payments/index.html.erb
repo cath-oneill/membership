@@ -1,0 +1,58 @@
+<h1>All Payments</h1>
+
+<div class="row">
+<%= form_for_filterrific @filterrific do |f| %>
+  <div class="row">
+    
+  <div class = "small-3 columns">
+    Search
+    <%= f.text_field(:search_query) %>
+  </div>
+  <div class = "small-3 columns">
+    Sorted by
+    <%= f.select(:sorted_by, @filterrific.select_options[:sorted_by]) %>
+  </div>  
+  <div class="small-3 columns">
+    Dues Selection
+    <%= f.select(
+      :by_dues,
+      @filterrific.select_options[:by_dues],
+      { include_blank: '- Any -' }
+    ) %>
+  </div>  
+  <div class="right">
+      <%= link_to('Reset filters', reset_filterrific_url, class: "button round tiny info button-down") %>
+  </div>
+  </div>  
+  <div class="row">
+  <div class= "small-3 columns">
+    Payment After
+    <%= f.date_field(:date_gte) %>
+  </div>
+  <div class= "small-3 columns">
+    Payment Before
+    <%= f.date_field(:date_lte) %>
+  </div>   
+  <div class= "small-3 columns">
+    $ Greater Than
+    <%= f.number_field(:amount_gte) %>
+  </div>   
+  <div class= "small-3 columns">
+    $ Less Than
+    <%= f.number_field(:amount_lte) %>
+  </div>   
+    
+  </div>
+
+  <%# add an automated spinner to your form when the list is refreshed %>
+  <%= render_filterrific_spinner %>
+<% end %>
+</div>
+
+<%= render(
+  partial: 'payments/list',
+  locals: { payments: @payments }
+) %>
+
+<br>
+

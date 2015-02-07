@@ -1,5 +1,5 @@
-<h1>Listing Admin Users</h1>
-<h3>This page is for creating and removing administrators who can access this website.  Be very, very careful!</h3>
+<p class="alert-box round alert">This page is for creating and removing administrators who can access this website.  Be very, very careful!</p>
+<h1>Adminstrators</h1>
 
 <table>
   <thead>
@@ -17,7 +17,7 @@
         <td><%= user.email %></td>
         <td><%= user.created_at.to_date %></td>
         <td><%= user.current_sign_in_at.to_date unless user.current_sign_in_at.nil? %></td>
-        <td><%= link_to 'Destroy', admin_path(user), method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= link_to 'Destroy', admin_path(user), method: :delete, data: { confirm: 'Are you sure?' }, class: "tiny button round alert" %></td>
       </tr>
     <% end %>
   </tbody>
@@ -39,15 +39,17 @@
     </div>
   <% end %>
 
-  <div class="field">
+<div class="row">
+  <div class="small-4 columns field">
     <%= f.label :email %><br>
     <%= f.email_field :email %>
   </div>
-  <div class="field">
+  <div class="field small-4 columns">
     <%= f.label :password %><br>
     <%= f.text_field :password %>
   </div>
-  <div class="actions">
-    <%= f.submit %>
+  <div class="actions button-down-3">
+    <%= f.submit class: "button success radius" %>
   </div>
+</div>
 <% end %>

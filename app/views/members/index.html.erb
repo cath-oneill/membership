@@ -1,4 +1,5 @@
-<h1>Listing members</h1>
+<h1>Membership</h1>
+
 
 <div class="row">
 <%= form_for_filterrific @filterrific do |f| %>
@@ -10,18 +11,33 @@
     Sorted by
     <%= f.select(:sorted_by, @filterrific.select_options[:sorted_by]) %>
   </div>  
+  <div class= "small-3 columns">
+    Dues Paid After
+    <%= f.date_field(:last_dues_paid_gte) %>
+  </div>  
+  <div class="small-3 columns">
+    Zip Code Selection
+    <%= f.select(
+      :by_zip_code,
+      @filterrific.select_options[:by_zip_code],
+      { include_blank: '- Any -' }
+    ) %>
+    <%# See below for the Country.options_for_select presenter method %>
+  </div>
+  <div class="right">
+      <%= link_to('Reset filters', reset_filterrific_url, class: "button round tiny info button-down") %>
+  </div>
   <%# add an automated spinner to your form when the list is refreshed %>
   <%= render_filterrific_spinner %>
 <% end %>
 </div>
+
 
 <%= render(
   partial: 'members/list',
   locals: { members: @members }
 ) %>
 
-<%= p params %>
-
+<%= link_to 'Create New Member', new_member_path, class: "button success radius" %>
 <br>
 
-<%= link_to 'New Member', new_member_path %>

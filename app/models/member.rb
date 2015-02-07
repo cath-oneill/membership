@@ -2,32 +2,29 @@ class Member < ActiveRecord::Base
   has_many :payments
   has_many :notes
 
-  scope :last_dues, lambda { joins(:payments).where("payments.date = (SELECT MAX(payments.date) FROM payments WHERE payments.member_id = members.id)") }
-
-
   filterrific(
     default_filter_params: { sorted_by: 'name_asc' },
     available_filters: [
       :search_query,
-      :sorted_by
-      # :with_country_id,
-      # :with_created_at_gte
+      :sorted_by,
+      :by_zip_code,
+      :last_dues_paid_gte
     ]
   )
 
   # default for will_paginate
   self.per_page = 10
 
-  scope :last_payment, joins(:payments)
-
   scope :sorted_by, lambda { |sort_option|
     # extract the sort direction from the param value.
-    direction = (sort_option =~ /desc$/) ? 'desc' : 'asc'
+    direction = (sort_option =~ /desc$/) ? :desc : :asc
     case sort_option.to_s
-    when /^last_dues_paid_/
-      Member.last_dues
+    when /^zip_/
+      order(zip: direction)
+    when /^dues_/
+      order(dues_paid: direction)
     when /^name_/
-      order("LOWER(members.last_name) #{ direction }, LOWER(members.first_name) #{ direction }")
+      order(last_name: direction)
     else
       raise(ArgumentError, "Invalid sort option: #{ sort_option.inspect }")
     end
@@ -54,27 +51,31 @@ class Member < ActiveRecord::Base
     )
   }
 
-  def current_member?(date_string = nil)
-    date = set_date(date_string)
-    self.payments.where(date: date-365..date).present?
-  end
+  scope :last_dues_paid_gte, lambda { |ref_date|
+    where('members.dues_paid >= ?', ref_date)
+  }
 
-  def paid_within_three_years?(date_string = nil)
-    date = set_date(date_string)
-    self.payments.where(date: date-1096..date).present?
-  end
+  scope :by_zip_code, lambda { |zips|
+    where(zip: [*zips.to_s])
+  }
 
-  def expiration_date
-    self.payments.order(:date).last.date + 365
+  def self.options_for_zip_select
+    pluck(:zip).uniq.map { |e| [e, e] }
   end
 
   def self.options_for_sorted_by
     [
       ['Last Name (a-z)', 'name_asc'],
       ['Last Name (z-a)', 'name_desc'],
-      ['Dues Last Paid', 'last_dues_paid_asc']
+      ['Dues Last Paid (oldest first)', 'dues_asc'],
+      ['Dues Last Paid (newest first)', 'dues_desc'],
+      ['Zip Code', 'zip_asc'],
     ]
   end  
+
+  def full_name
+    "#{first_name} #{last_name}"
+  end
 
   private
 

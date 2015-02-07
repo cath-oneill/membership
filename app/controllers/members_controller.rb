@@ -8,8 +8,9 @@ class MembersController < ApplicationController
       Member,
       params[:filterrific],
       :select_options => {
-        sorted_by: Member.options_for_sorted_by
-      })
+        sorted_by: Member.options_for_sorted_by,
+        by_zip_code: Member.options_for_zip_select
+      }) or return
     @members = @filterrific.find.page(params[:page])
   end
 
@@ -66,6 +67,6 @@ class MembersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def member_params
-      params.require(:member).permit(:first_name, :last_name, :address, :city, :state, :zip, :email, :cell_phone, :home_phone, :work_phone, :employer, :occupation, :title)
+      params.require(:member).permit(:first_name, :last_name, :address, :city, :state, :zip, :email, :cell_phone, :home_phone, :work_phone, :employer, :occupation, :title, :dues_paid)
     end
 end

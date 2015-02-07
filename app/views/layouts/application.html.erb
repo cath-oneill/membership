@@ -27,15 +27,21 @@
         <!-- Right Nav Section -->
         <ul class="right">
           <li class="has-dropdown">
-            <a href="#">Logged in as <%= current_user.email %>.</a>
+            <a href="#"><%= current_user.email %></a>
             <ul class="dropdown">
               <li><%= link_to 'Update Password', edit_user_registration_path, :class => '' %></li>
               <li><%= link_to "Logout", destroy_user_session_path, method: :delete, :class => ''  %></li>
             </ul>
           </li>
-          <li><%= link_to 'Members', members_path, :class => '' %></li>
-          <li><%= link_to "Payments", payments_path, :class => ''  %></li>
-          <li><%= link_to "Admin", admin_index_path, :class => ''  %></li>
+          <li class="has-dropdown"><%= link_to 'Members', members_path, :class => '' %>
+            <ul class="dropdown">
+              <li><%= link_to 'All Members', members_path, :class => '' %></li>
+              <li><%= link_to 'Create New Member', members_path, :class => '' %></li>
+            </ul>
+          </li>
+          <li class=""><%= link_to "Payments", payments_path, :class => 'right-margin'  %></li>
+          <li class=""><%= link_to "Admin", admin_index_path, :class => 'right-margin'  %></li>
+        </ul>
       </section>
     </nav>
     </div>

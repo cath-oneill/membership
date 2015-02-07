@@ -75,6 +75,19 @@ class Payment < ActiveRecord::Base
     where('payments.amount_cents <= ?', ref_amount*100)
   }
 
+  def self.to_csv
+    CSV.generate do |csv|
+      columns = ["id", "date", "amount",  "member_id", "member_name", "note", "dues"]
+      csv << columns
+      all.each do |payment|
+        information = payment.attributes.values_at("id", "date", "member_id", "note", "dues")
+        information.insert(2, payment.amount_cents/100)
+        information.insert(4, payment.member.full_name)
+        csv << information
+      end
+    end
+  end
+
   def self.options_for_sorted_by
     [
       ['Amount (smallest first)', 'amount_asc'],

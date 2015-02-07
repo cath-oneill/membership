@@ -4,7 +4,6 @@ class PaymentsController < ApplicationController
 
   # GET /payments
   def index
-    p params
     @filterrific = initialize_filterrific(
       Payment,
       params[:filterrific],
@@ -13,6 +12,18 @@ class PaymentsController < ApplicationController
         by_dues: Payment.options_for_dues_select
       }) or return
     @payments = @filterrific.find.page(params[:page])
+    @payments_for_csv = @filterrific.find
+
+    respond_to do |format|
+      format.html
+      format.js
+      format.csv {render text: @payments_for_csv.to_csv}
+    end
+
+  rescue ActiveRecord::RecordNotFound => e
+    # There is an issue with the persisted param_set. Reset it.
+    puts "Had to reset filterrific params: #{ e.message }"
+    redirect_to(reset_filterrific_url(format: :html)) and return
   end
 
   # GET members/:member_id/payments/new

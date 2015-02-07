@@ -40,10 +40,18 @@
       </div>
       <div class="field row">
         <div class="small-3 columns">
+          <%= f.label :address2, class: "right"%><br>
+        </div>
+        <div class="small-8 columns end">
+          <%= f.text_field :address2, placeholder: "Not Required" %>
+        </div>
+      </div>
+      <div class="field row">
+        <div class="small-3 columns">
           <%= f.label :city, class: "right"%><br>
         </div>
         <div class="small-8 columns end">
-          <%= f.text_field :city, :required => true %>
+          <%= f.text_field :city, value: "Austin", :required => true %>
         </div>
       </div>
       <div class="field row">
@@ -51,7 +59,7 @@
           <%= f.label :state, class: "right"%><br>
         </div>
         <div class="small-8 columns end">
-          <%= f.text_field :state, :required => true %>
+          <%= f.text_field :state, value: "TX", :required => true %>
         </div>
       </div>
       <div class="field row">

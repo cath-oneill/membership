@@ -2,6 +2,8 @@ class Member < ActiveRecord::Base
   has_many :payments
   has_many :notes
 
+  validates :first_name, :last_name, :presence => true
+
   filterrific(
     default_filter_params: { sorted_by: 'name_asc' },
     available_filters: [

@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   resources :admin, only: [:index, :create, :destroy]
   
   resources :members, except: [:destroy] do
+    collection { post :import_new, :import_update }
     resources :payments, only: [:new, :create, :edit, :update, :destroy]
     resources :notes, only: [:new, :create, :edit, :update]
   end

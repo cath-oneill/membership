@@ -70,6 +70,42 @@ class Member < ActiveRecord::Base
     end
   end
 
+  def self.import_new(file)
+    not_created = []
+    CSV.foreach(file.path, headers: true) do |row|
+
+      member_hash = row.to_hash 
+      next if member_hash["first_name"].nil? || member_hash["last_name"].nil?
+      
+      member = Member.where(first_name: member_hash["first_name"], last_name: member_hash["last_name"])
+
+      if member.empty?
+        Member.create!(member_hash)
+      else
+        not_created << "#{member_hash["first_name"]} #{member_hash["last_name"]}"
+      end
+    end # end CSV.foreach
+    return not_created
+  end # end self.import(file)
+
+  def self.import_update(file)
+    not_updated =[]
+    CSV.foreach(file.path, headers: true) do |row|
+      
+      member_hash = row.to_hash 
+      next if member_hash["id"].nil?
+      
+      member = Member.where(id: member_hash["id"])
+
+      if member.length == 1
+        member.first.update(member_hash)
+      else
+        not_updated << "#{member_hash["first_name"]} #{member_hash["last_name"]}"
+      end
+    end # end CSV.foreach
+    return not_updated
+  end # end self.import(file)
+
   def self.options_for_zip_select
     pluck(:zip).uniq.map { |e| [e, e] }
   end

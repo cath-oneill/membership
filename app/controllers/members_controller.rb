@@ -72,6 +72,23 @@ class MembersController < ApplicationController
     end
   end
 
+  def import_new
+    response = Member.import_new(params[:file])
+    if response.empty?
+      redirect_to members_path, notice: "All rows imported and created."
+    else 
+      redirect_to members_path, alert: "#{response.length} rows rejected: #{response.join(", ")}"
+    end  
+  end
+
+  def import_update
+    response = Member.import_update(params[:file])
+    if response.empty?
+      redirect_to members_path, notice: "All rows imported and updated."
+    else 
+      redirect_to members_path, alert: "#{response.length} rows rejected: #{response.join(", ")}"
+    end  
+  end
 
   private
     # Use callbacks to share common setup or constraints between actions.

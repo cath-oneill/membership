@@ -2,6 +2,8 @@ class Member < ActiveRecord::Base
   has_many :payments
   has_many :notes
 
+  serialize :clubs
+
   validates :first_name, :last_name, :presence => true
 
   filterrific(

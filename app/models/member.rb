@@ -72,17 +72,26 @@ class Member < ActiveRecord::Base
 
   def self.import_new(file)
     not_created = []
+    headers = CSV.read(file.path)[0]
+
+    unless headers.include?("first_name") && headers.include?("last_name")
+      raise "Import Cancelled: Incorrect Required Headers"
+    end
+
     CSV.foreach(file.path, headers: true) do |row|
 
       member_hash = row.to_hash 
-      next if member_hash["first_name"].nil? || member_hash["last_name"].nil?
-      
+      if member_hash["first_name"].nil? || member_hash["last_name"].nil?
+        not_created << "row missing required first_name and last_name"
+        next
+      end
+
       member = Member.where(first_name: member_hash["first_name"], last_name: member_hash["last_name"])
 
       if member.empty?
         Member.create!(member_hash)
       else
-        not_created << "#{member_hash["first_name"]} #{member_hash["last_name"]}"
+        not_created << "cannot find member - #{member_hash["first_name"]} #{member_hash["last_name"]}"
       end
     end # end CSV.foreach
     return not_created
@@ -90,17 +99,26 @@ class Member < ActiveRecord::Base
 
   def self.import_update(file)
     not_updated =[]
+    headers = CSV.read(file.path)[0]
+
+    unless headers.include?("id")
+      raise "Import Cancelled: Incorrect Required Headers"
+    end
+
     CSV.foreach(file.path, headers: true) do |row|
       
       member_hash = row.to_hash 
-      next if member_hash["id"].nil?
+      if member_hash["id"].nil?
+        not_updated << "row missing required id number"
+        next
+      end        
       
       member = Member.where(id: member_hash["id"])
 
       if member.length == 1
         member.first.update(member_hash)
       else
-        not_updated << "#{member_hash["first_name"]} #{member_hash["last_name"]}"
+        not_updated << "cannot find member - #{member_hash["first_name"]} #{member_hash["last_name"]}"
       end
     end # end CSV.foreach
     return not_updated

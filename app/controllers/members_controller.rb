@@ -79,6 +79,8 @@ class MembersController < ApplicationController
     else 
       redirect_to members_path, alert: "#{response.length} rows rejected: #{response.join(", ")}"
     end  
+  rescue Exception => e
+      redirect_to payments_path, alert: e 
   end
 
   def import_update

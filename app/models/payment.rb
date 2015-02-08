@@ -88,6 +88,43 @@ class Payment < ActiveRecord::Base
     end
   end
 
+  def self.import_new(file)
+    not_created = []
+    headers = CSV.read(file.path)[0]
+
+    unless headers.include?("amount") && headers.include?("date") && headers.include?("member_first_name") && headers.include?("member_last_name")
+      raise "Import Cancelled: Incorrect Required Headers"
+    end
+
+    CSV.foreach(file.path, headers: true) do |row|
+      payment_hash = row.to_hash 
+
+      if payment_hash["amount"].nil? || payment_hash["date"].nil? || payment_hash["member_first_name"].nil? || payment_hash["member_last_name"].nil?
+        not_created << "row missing required data"
+        next
+      end
+
+      member = Member.where(first_name: payment_hash["member_first_name"], last_name: payment_hash["member_last_name"])
+      if member.length != 1
+        not_created << "cannot find member - #{payment_hash["member_first_name"]} #{payment_hash["member_last_name"]}"
+        next
+      end
+
+      new_date = Date.parse(payment_hash["date"])
+      payment_hash["date"] = new_date      
+      
+      payment = member.first.payments.where("date >?", (payment_hash["date"] - 2.months)).where("date < ?", (payment_hash["date"] + 2.months)).where(amount_cents: (payment_hash["amount"].to_f * 100))
+      if payment.empty?
+        payment_hash = payment_hash.slice("amount", "date", "note", "dues")
+        payment_hash["member_id"] = member.first.id
+        Payment.create!(payment_hash)
+      else
+        not_created << "conflicts with another payment - #{payment_hash["member_first_name"]} #{payment_hash["member_last_name"]}"
+      end
+    end # end CSV.foreach
+    return not_created
+  end # end self.import(file)
+
   def self.options_for_sorted_by
     [
       ['Amount (smallest first)', 'amount_asc'],

@@ -16,7 +16,9 @@ Rails.application.routes.draw do
     resources :notes, only: [:new, :create, :edit, :update]
   end
 
-  resources :payments, only: [:index]
+  resources :payments, only: [:index] do
+    collection { post :import_new }
+  end
   
 
 end

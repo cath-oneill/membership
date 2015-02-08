@@ -61,6 +61,17 @@ class PaymentsController < ApplicationController
     redirect_to payments_url, notice: 'Payment was successfully destroyed.'
   end
 
+  def import_new
+    response = Payment.import_new(params[:file])
+    if response.empty?
+      redirect_to payments_path, notice: "All rows imported and created."
+    else 
+      redirect_to payments_path, alert: "#{response.length} rows rejected: #{response.join(", ")}"
+    end  
+  rescue Exception => e
+      redirect_to payments_path, alert: e 
+  end  
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_payment

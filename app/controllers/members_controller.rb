@@ -107,7 +107,9 @@ class MembersController < ApplicationController
     def formatted_member_params
       clubs = params["clubs"]
       new_params = member_params
-      new_params["clubs"] = clubs.keys
+      unless clubs.nil?
+        new_params["clubs"] = clubs.keys
+      end
       new_params
     end
 end

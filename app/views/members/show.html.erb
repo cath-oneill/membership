@@ -1,26 +1,46 @@
 <h1><%= combine_with_space([@member.title, @member.first_name, @member.last_name]) %></h1>
 
 <div class="panel">
-  
+
+<% unless @member.address.blank? && @member.address2.blank? && @member.zip.blank? %>  
 <p>
   <strong>Address:</strong>
   <%= combine_with_commas([@member.address, @member.city, @member.state, @member.zip]) %>
 </p>
+<% end %>
 
+<% unless @member.email.blank? && @member.email2.blank? %>
 <p>
   <strong>Email Address(es):</strong>
   <%= combine_with_commas([@member.email, @member.email2])%>
 </p>
+<% end %>
 
+<% unless @member.cell_phone.blank? && @member.home_phone.blank? && @member.work_phone.blank? %>
 <p>
   <strong>Phone Numbers:</strong>
   <%= phone_list %>
 </p>
+<% end %>
 
+<% unless @member.employer.blank? && @member.occupation.blank? %>
 <p>
   <strong>Employment:</strong>
   <%= combine_with_commas([@member.occupation, @member.employer]) %>
 </p>
+<% end %>
+
+<p>
+  <strong>Mailing Info:</strong>
+  <%= mail_view %>
+</p>
+
+<% unless @member.clubs.blank? %>
+<p>
+  <strong>Clubs:</strong>
+  <%= combine_with_commas(@member.clubs) %>
+</p>
+<% end %>
 </div>
 
 <h3><%= @member.first_name %>'s Payments:</h3>

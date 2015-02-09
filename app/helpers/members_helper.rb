@@ -15,4 +15,14 @@ module MembersHelper
     hash.reject! { |k, v| v.blank? }
     hash.map {|k,v| "#{v} (#{k})"}.join(", ")   
   end
+
+  def mail_view
+    if @member.skip_mail == true
+      return "MARKED NO MAIL"
+    elsif @member.mail_name.blank? && @member.greeting.blank?
+      return "DEFAULT MAILING INFO"
+    else
+      return "Address Name: #{@member.calculated_mail_name} | Greeting: #{@member.calculated_greeting}"
+    end
+  end
 end

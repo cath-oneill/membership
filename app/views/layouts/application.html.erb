@@ -40,7 +40,12 @@
             </ul>
           </li>
           <li class=""><%= link_to "Payments", payments_path, :class => 'right-margin'  %></li>
-          <li class=""><%= link_to "Admin", admin_index_path, :class => 'right-margin'  %></li>
+          <li class="has-dropdown"><%= link_to "Site Info", settings_path, :class => ''  %>
+            <ul class="dropdown">
+              <li><%= link_to "Administrators", admin_index_path, :class => ''  %></li>
+              <li><%= link_to "Settings", settings_path, :class => ''  %></li>
+            </ul>
+          </li>
         </ul>
       </section>
     </nav>

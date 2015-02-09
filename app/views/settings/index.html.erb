@@ -1,0 +1,35 @@
+<p class="alert-box radius alert">This page is for updating system-wide settings.  Be very, very careful!</p>
+<h4>Settings</h4>
+
+
+<%= form_for(@club_name) do |f| %>
+<div class="row">
+  <div class="field small-10 columns">
+    <div class="small-2 columns">
+      <%= f.label "Club Name", class: "left"%><br>
+    </div>
+    <div class="small-9 columns end">
+      <%= f.text_field :value %>
+    </div>
+  </div>  
+  <div class="actions columns small-2">
+    <%= f.submit "Update", class: "button radius success tiny" %>
+  </div>
+</div>
+<% end %>
+
+<%= form_for(@other_clubs) do |f| %>
+<div class="row">
+  <div class="field small-10 columns">
+    <div class="small-2 columns">
+      <%= f.label "Other Club", class: "left"%><br>
+    </div>
+    <div class="small-9 columns end">
+      <%= f.text_field :value %>
+    </div>
+  </div>  
+  <div class="actions columns small-2">
+    <%= f.submit "Update", class: "button radius success tiny" %>
+  </div>
+</div>
+<% end %>

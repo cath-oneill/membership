@@ -19,6 +19,8 @@ Rails.application.routes.draw do
   resources :payments, only: [:index] do
     collection { post :import_new }
   end
+
+  resources :settings, only: [:index, :update]
   
 
 end

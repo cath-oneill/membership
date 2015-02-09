@@ -123,11 +123,16 @@
         </div>
       </div>
       <br><br>       
-      <h5>Other Club Membership</h5>
-      <div class="field row">
+      <h5>Other Club Memberships</h5>
+      <div class="field row panel">
       <% other_clubs.each do |c| %>
-        <%= check_box_tag("clubs[#{c}]") %>
-        <%= label_tag("clubs[#{c}]", c) %>
+        <% if @member.clubs.include?(c) %>
+          <%= check_box_tag("clubs[#{c}]", c, {checked: true}) %>
+          <label for=<%= c %>><%= c %></label>     
+        <% else %>
+          <%= check_box_tag("clubs[#{c}]", c) %>
+          <label for=<%= c %>><%= c %></label>     
+        <% end %>
       <% end %>
       </div>
     </div>

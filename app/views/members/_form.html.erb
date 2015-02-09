@@ -15,7 +15,7 @@
     <div class="columns small-12 medium-6 large-4 border-right" >
       <h5>Member Information - Required</h5>
       <div class="field row">
-        <div class="small-3 columns">
+        <div class="small-4 columns">
           <%= f.label :first_name, class: "right"%><br>
         </div>
         <div class="small-8 columns end">
@@ -23,7 +23,7 @@
         </div>
       </div>
       <div class="field row">
-        <div class="small-3 columns">
+        <div class="small-4 columns">
           <%= f.label :last_name, class: "right"%><br>
         </div>
         <div class="small-8 columns end">
@@ -31,7 +31,7 @@
         </div>
       </div>
       <div class="field row">
-        <div class="small-3 columns">
+        <div class="small-4 columns">
           <%= f.label :address, class: "right"%><br>
         </div>
         <div class="small-8 columns end">
@@ -39,7 +39,7 @@
         </div>
       </div>
       <div class="field row">
-        <div class="small-3 columns">
+        <div class="small-4 columns">
           <%= f.label :address2, class: "right"%><br>
         </div>
         <div class="small-8 columns end">
@@ -47,7 +47,7 @@
         </div>
       </div>
       <div class="field row">
-        <div class="small-3 columns">
+        <div class="small-4 columns">
           <%= f.label :city, class: "right"%><br>
         </div>
         <div class="small-8 columns end">
@@ -55,7 +55,7 @@
         </div>
       </div>
       <div class="field row">
-        <div class="small-3 columns">
+        <div class="small-4 columns">
           <%= f.label :state, class: "right"%><br>
         </div>
         <div class="small-8 columns end">
@@ -63,19 +63,27 @@
         </div>
       </div>
       <div class="field row">
-        <div class="small-3 columns">
+        <div class="small-4 columns">
           <%= f.label :zip, class: "right"%><br>
         </div>
         <div class="small-8 columns end">
           <%= f.text_field :zip, :required => true %>
         </div>
       </div>
+      <div class="field row">
+        <div class="small-4 columns">
+          <%= f.label :title, class: "right"%><br>
+        </div>
+        <div class="small-8 columns end">
+          <%= f.text_field :title, placeholder: "Not Required" %>
+        </div>
+      </div>      
     </div>
 
     <div class="columns small-12 medium-6 large-4">
       <h5>Contact Information</h5>
       <div class="field row">
-        <div class="small-3 columns">
+        <div class="small-4 columns">
           <%= f.label :email, class: "right"%><br>
         </div>
         <div class="small-8 columns end">
@@ -83,7 +91,7 @@
         </div>
       </div>
       <div class="field row">
-        <div class="small-3 columns">
+        <div class="small-4 columns">
           <%= f.label :email2, class: "right"%><br>
         </div>
         <div class="small-8 columns end">
@@ -91,7 +99,7 @@
         </div>
       </div>  
       <div class="field row">
-        <div class="small-3 columns">
+        <div class="small-4 columns">
           <%= f.label :cell_phone, class: "right"%><br>
         </div>
         <div class="small-8 columns end">
@@ -99,7 +107,7 @@
         </div>
       </div>
       <div class="field row">
-        <div class="small-3 columns">
+        <div class="small-4 columns">
           <%= f.label :home_phone, class: "right"%><br>
         </div>
         <div class="small-8 columns end">
@@ -107,19 +115,27 @@
         </div>
       </div>
       <div class="field row">
-        <div class="small-3 columns">
+        <div class="small-4 columns">
           <%= f.label :work_phone, class: "right"%><br>
         </div>
         <div class="small-8 columns end">
           <%= f.telephone_field :work_phone %>
         </div>
-      </div> 
+      </div>
+      <br><br>       
+      <h5>Other Club Membership</h5>
+      <div class="field row">
+      <% other_clubs.each do |c| %>
+        <%= check_box_tag("clubs[#{c}]") %>
+        <%= label_tag("clubs[#{c}]", c) %>
+      <% end %>
+      </div>
     </div>
 
     <div class="columns small-12 medium-6 large-4">
       <h5>Legally Required<br>Employment Information</h5>
       <div class="field row">
-        <div class="small-3 columns">
+        <div class="small-4 columns">
           <%= f.label :employer, class: "right"%><br>
         </div>
         <div class="small-8 columns end">
@@ -127,7 +143,7 @@
         </div>
       </div>
       <div class="field row">
-        <div class="small-3 columns">
+        <div class="small-4 columns">
           <%= f.label :occupation, class: "right"%><br>
         </div>
         <div class="small-8 columns end">
@@ -135,15 +151,31 @@
         </div>
       </div>
       <br><br>
-      <h5>Optional Title</h5>
+      <h5>Mailing Information</h5>
       <div class="field row">
-        <div class="small-3 columns">
-          <%= f.label :title, class: "right"%><br>
+        <div class="small-4 columns">
+          <%= f.label :skip_mail, class: "right"%><br>
         </div>
         <div class="small-8 columns end">
-          <%= f.text_field :title %>
+          <%= f.check_box :skip_mail %>
         </div>
       </div>
+      <div class="field row">
+        <div class="small-4 columns">
+          <%= f.label :mail_name, class: "right"%><br>
+        </div>
+        <div class="small-8 columns end">
+          <%= f.text_field :mail_name, placeholder: "currently default value" %>
+        </div>
+      </div>
+      <div class="field row">
+        <div class="small-4 columns">
+          <%= f.label :greeting, class: "right"%><br>
+        </div>
+        <div class="small-8 columns end">
+          <%= f.text_field :greeting, placeholder: "currently default value" %>
+        </div>
+      </div>      
       <div class="actions row">
         <%= f.submit class: "button radius success right" %>
       </div>

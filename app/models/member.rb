@@ -2,9 +2,10 @@ class Member < ActiveRecord::Base
   has_many :payments
   has_many :notes
 
-  serialize :clubs
+  serialize :clubs, Array
 
   validates :first_name, :last_name, :presence => true
+  validate  :all_clubs_are_valid
 
   filterrific(
     default_filter_params: { sorted_by: 'name_asc' },
@@ -65,12 +66,16 @@ class Member < ActiveRecord::Base
 
   def self.to_csv
     CSV.generate do |csv|
-      csv << column_names
+      csv << (column_names + ["calculated_mail_name", "calculated_greeting"])
       all.each do |member|
-        csv << member.attributes.values_at(*column_names)
+        information = member.attributes.values_at(*column_names)
+        information << member.calculated_mail_name
+        information << member.calculated_greeting
+        csv << information
       end
     end
   end
+    
 
   def self.import_new(file)
     not_created = []
@@ -144,10 +149,41 @@ class Member < ActiveRecord::Base
     "#{first_name} #{last_name}"
   end
 
+  def name_with_title
+    ([title, first_name, last_name] - [nil, ""]).join(" ")
+  end
+
+  def calculated_mail_name
+    if mail_name.blank?
+      return name_with_title
+    else
+      return mail_name
+    end
+  end
+
+  def calculated_greeting
+    if greeting.blank?
+      return first_name
+    else
+      return greeting
+    end
+  end
+
   private
+  def all_clubs_are_valid
+    all_clubs = Setting.where(lookup: "other_clubs").first.value
+    unless self.clubs.blank?
+       self.clubs.each do |club|
+          unless all_clubs.include?(club)
+             errors.add(:clubs, "#{club} is not valid")
+          end
+       end
+    end
+   end  
 
   def set_date(date_string)
     return Date.today if date_string.nil?
     Date.parse(date_string)
   end  
+
 end

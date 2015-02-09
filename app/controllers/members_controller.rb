@@ -45,7 +45,7 @@ class MembersController < ApplicationController
   # POST /members
   # POST /members.json
   def create
-    @member = Member.new(member_params)
+    @member = Member.new(formatted_member_params)
 
     respond_to do |format|
       if @member.save
@@ -61,8 +61,9 @@ class MembersController < ApplicationController
   # PATCH/PUT /members/1
   # PATCH/PUT /members/1.json
   def update
+    p member_params
     respond_to do |format|
-      if @member.update(member_params)
+      if @member.update(formatted_member_params)
         format.html { redirect_to @member, notice: 'Member was successfully updated.' }
         format.json { render :show, status: :ok, location: @member }
       else
@@ -100,6 +101,13 @@ class MembersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def member_params
-      params.require(:member).permit(:first_name, :last_name, :address, :city, :state, :zip, :email, :email2, :cell_phone, :home_phone, :work_phone, :employer, :occupation, :title, :dues_paid)
+      params.require(:member).permit(:first_name, :last_name, :address, :address2, :city, :state, :zip, :email, :email2, :cell_phone, :home_phone, :work_phone, :employer, :occupation, :title, :dues_paid, :skip_mail, :mail_name, :greeting)
+    end
+
+    def formatted_member_params
+      clubs = params["clubs"]
+      new_params = member_params
+      new_params["clubs"] = clubs.keys
+      new_params
     end
 end

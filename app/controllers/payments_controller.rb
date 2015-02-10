@@ -42,7 +42,7 @@ class PaymentsController < ApplicationController
     if @payment.save
       redirect_to member_path(@member), notice: 'Payment was successfully created.'
     else
-      render new_member_payment_path
+      render new_member_payment_path(@member, @payment), alert: "Member was not updated.  Missing required fields."
     end
   end
 
@@ -51,7 +51,7 @@ class PaymentsController < ApplicationController
     if @payment.update(payment_params)
       redirect_to payments_path, notice: 'Payment was successfully updated.'
     else
-      render edit_member_payment_path
+      redirect_to edit_member_payment_path(@member, @payment), alert: "Payment was not updated.  Missing required fields."
     end
   end
 

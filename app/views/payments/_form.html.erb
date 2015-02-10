@@ -15,30 +15,30 @@
 
     <div class="field columns small-6 medium-4">
       <%= f.label :date %><br>
-      <%= f.date_field :date %>
+      <%= f.date_field :date, required: true %>
     </div>
     <div class="field columns small-6 medium-4">
       <%= f.label :amount %><br>
-      <%= f.text_field :amount %>
+      <%= f.text_field :amount, required: true %>
     </div>    
     <div class = "field columns small-6 medium-4">
       <%= f.label :dues %><br>
       <%= f.select :dues, options_for_select([
           ["Dues Payment", true],
-          ["Non-Dues Payment", false] ]) %>    
-    </div>
-    <div class="field columns small-6 medium-4">
-      <%= f.label :note %><br>
-      <%= f.text_area :note %>
+          ["Non-Dues Payment", false] ]), required: true %>    
     </div>
     <div class="field columns small-6 medium-4">
       <%= f.label :kind %><br>
-      <%= f.select :kind, options_for_select(payment_kinds) %>
+      <%= f.select :kind, options_for_select(payment_kinds), required: true %>
     </div>
     <div class="field columns small-6 medium-4">
       <%= f.label :deposit_date %><br>
       <%= f.date_field :deposit_date %>
     </div>        
+    <div class="field columns small-6 medium-4">
+      <%= f.label :note %><br>
+      <%= f.text_area :note %>
+    </div>
     <div class="actions button-down-4">
       <%= f.submit class: "radius small right success" %>
     </div>    

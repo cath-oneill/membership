@@ -7,4 +7,8 @@ module ApplicationHelper
   def other_clubs
     Setting.where(lookup: "other_clubs").first.value.scan(/\w+/) 
   end
+
+  def payment_kinds
+    Setting.where(lookup: "payment_kinds").first.value.scan(/\w+/) 
+  end  
 end

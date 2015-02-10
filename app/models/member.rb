@@ -76,6 +76,14 @@ class Member < ActiveRecord::Base
     end
   end
     
+  def self.duplicated_address_csv
+    CSV.generate do |csv|
+      csv << (["address"])
+      all.each do |duplicate|
+        csv << [duplicate.address]
+      end
+    end
+  end
 
   def self.import_new(file)
     not_created = []

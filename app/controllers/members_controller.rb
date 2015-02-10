@@ -27,6 +27,12 @@ class MembersController < ApplicationController
     redirect_to(reset_filterrific_url(format: :html)) and return
   end
 
+  def duplicate_address_report
+    @duplicates = Member.where.not(address: [nil, ""]).select(:address).group(:address).having("count(*) > 1")
+    respond_to do |format|
+      format.csv {render text: @duplicates.duplicated_address_csv}
+    end
+  end
 
   # GET /members/1
   # GET /members/1.json

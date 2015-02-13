@@ -20,6 +20,8 @@ gem 'money-rails'
 # Use jquery as the JavaScript library
 gem 'jquery-rails', '~> 3.1.2'
 
+gem 'squeel'
+
 # bundle exec rake doc:rails generates the API under doc/api.
 gem 'sdoc', '~> 0.4.0',          group: :doc
 

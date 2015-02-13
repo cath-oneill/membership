@@ -38,22 +38,8 @@ class Member < ActiveRecord::Base
   scope :search_query, lambda { |query|
     return nil  if query.blank?
     # condition query, parse into individual keywords
-    terms = query.downcase.split(/\s+/)
-    # replace "*" with "%" for wildcard searches,
-    # append '%', remove duplicate '%'s
-    terms = terms.map { |e|
-      (e.gsub('*', '%') + '%').gsub(/%+/, '%')
-    }
-    # configure number of OR conditions for provision
-    # of interpolation arguments. Adjust this if you
-    # change the number of OR conditions.
-    num_or_conditions = 2
-    where(
-      terms.map { |term|
-          "(LOWER(members.first_name) LIKE ? OR LOWER(members.last_name) LIKE ?)"
-      }.join(' AND '),
-      *terms.map { |e| [e] * num_or_conditions }.flatten
-    )
+    q = query.split(" ").map{|x| "%#{x}%"}
+    uniq.joins{notes}.where{(first_name.like_any q) | (last_name.like_any q) | (notes.content.like_any q)}
   }
 
   scope :last_dues_paid_gte, lambda { |ref_date|

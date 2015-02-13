@@ -30,7 +30,7 @@ class Payment < ActiveRecord::Base
     when /^date_/
       order(date: direction)
     when /^deposit_date_/
-      order(date: direction)      
+      order("deposit_date #{direction} NULLS LAST")      
     else
       raise(ArgumentError, "Invalid sort option: #{ sort_option.inspect }")
     end
@@ -155,8 +155,8 @@ class Payment < ActiveRecord::Base
       ['Amount (largest first)', 'amount_desc'],
       ['Date (oldest first)', 'date_asc'],
       ['Date (newest first)', 'date_desc'],
-      ['Deposit Date (newest first)', 'deposit_date_asc'],
-      ['Deposit Date (oldest first)', 'deposit_date_desc'],
+      ['Deposit Date (oldest first)', 'deposit_date_asc'],
+      ['Deposit Date (newest first)', 'deposit_date_desc'],
     ]
   end  
 

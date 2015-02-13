@@ -168,7 +168,7 @@ class Payment < ActiveRecord::Base
       ['Missing Deposit Date', 'depositdate_nil'],
       ['Missing Kind', 'kind_']
     ]
-    Setting.where(lookup: "payment_kinds").first.value.scan(/\w+/).each do |k|
+    Setting.list_values("payment_kinds").each do |k|
       array << ["#{k.capitalize} Payment", "kind_#{k}"]
     end
     return array

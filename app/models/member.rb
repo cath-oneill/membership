@@ -179,10 +179,9 @@ class Member < ActiveRecord::Base
 
   private
   def all_clubs_are_valid
-    all_clubs = Setting.where(lookup: "other_clubs").first.value
     unless self.clubs.blank?
        self.clubs.each do |club|
-          unless all_clubs.include?(club)
+          unless Setting.list_values("other_clubs").include?(club)
              errors.add(:clubs, "#{club} is not valid")
           end
        end

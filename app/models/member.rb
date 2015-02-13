@@ -43,7 +43,7 @@ class Member < ActiveRecord::Base
   }
 
   scope :last_dues_paid_gte, lambda { |ref_date|
-    where('members.dues_paid >= ?', ref_date)
+    where{dues_paid >= ref_date}
   }
 
   scope :by_zip_code, lambda { |zip|

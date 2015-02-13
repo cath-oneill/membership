@@ -39,22 +39,8 @@ class Payment < ActiveRecord::Base
   scope :search_query, lambda { |query|
     return nil  if query.blank?
     # condition query, parse into individual keywords
-    terms = query.downcase.split(/\s+/)
-    # replace "*" with "%" for wildcard searches,
-    # append '%', remove duplicate '%'s
-    terms = terms.map { |e|
-      (e.gsub('*', '%') + '%').gsub(/%+/, '%')
-    }
-    # configure number of OR conditions for provision
-    # of interpolation arguments. Adjust this if you
-    # change the number of OR conditions.
-    num_or_conditions = 3
-    joins(:member).where(
-      terms.map { |term|
-        "members.last_name ILIKE ? OR members.first_name ILIKE ? OR payments.note ILIKE ?"
-      }.join(' AND '),
-      *terms.map { |e| [e] * num_or_conditions }.flatten
-    )
+    q = query.split(" ").map{|x| "%#{x}%"}
+    joins{member}.where{(member.last_name.like_any q) | (member.first_name.like_any q) | (payments.note.like_any q)}
   }
 
   scope :selection, lambda { |keyword|
@@ -76,27 +62,27 @@ class Payment < ActiveRecord::Base
 
 
   scope :date_gte, lambda { |ref_date|
-    where('payments.date >= ?', ref_date)
+    where{date >= ref_date}
   }
 
   scope :date_lte, lambda { |ref_date|
-    where('payments.date <= ?', ref_date)
+    where{date <= ref_date}
   }
 
   scope :deposit_date_gte, lambda { |ref_date|
-    where('payments.deposit_date >= ?', ref_date)
+    where{deposit_date >= ref_date}
   }
 
   scope :deposit_date_lte, lambda { |ref_date|
-    where('payments.deposit_date <= ?', ref_date)
+    where{deposit_date <= ref_date}
   }  
 
   scope :amount_gte, lambda { |ref_amount|
-    where('payments.amount_cents >= ?', ref_amount*100)
+    where{amount_cents >= ref_amount*100}
   }
 
   scope :amount_lte, lambda { |ref_amount|
-    where('payments.amount_cents <= ?', ref_amount*100)
+    where{amount_cents <= ref_amount*100}
   }
 
   def self.to_csv

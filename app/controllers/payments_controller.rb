@@ -9,7 +9,7 @@ class PaymentsController < ApplicationController
       params[:filterrific],
       :select_options => {
         sorted_by: Payment.options_for_sorted_by,
-        by_dues: Payment.options_for_dues_select
+        selection: Payment.options_for_selection
       }) or return
     @payments = @filterrific.find.page(params[:page])
     @payments_for_csv = @filterrific.find

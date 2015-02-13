@@ -10,7 +10,7 @@ class Payment < ActiveRecord::Base
     available_filters: [
       :search_query,
       :sorted_by,
-      :by_dues,
+      :selection,
       :date_gte,
       :date_lte,
       :amount_gte,
@@ -29,6 +29,8 @@ class Payment < ActiveRecord::Base
       order(amount_cents: direction)
     when /^date_/
       order(date: direction)
+    when /^deposit_date_/
+      order(date: direction)      
     else
       raise(ArgumentError, "Invalid sort option: #{ sort_option.inspect }")
     end
@@ -55,9 +57,23 @@ class Payment < ActiveRecord::Base
     )
   }
 
-  scope :by_dues, lambda { |boolean|
-    where(dues: boolean)
+  scope :selection, lambda { |keyword|
+    field = keyword.split("_").first
+    value = keyword.split("_")[1]
+    case field
+    when "dues"
+      where(dues: value)
+    when "date"
+      where(date: nil)
+    when "depositdate"
+      where(deposit_date: nil)      
+    when "kind"
+      where(kind: value)
+    else
+      raise(ArgumentError, "Invalid sort option: #{ sort_option.inspect }")
+    end
   }
+
 
   scope :date_gte, lambda { |ref_date|
     where('payments.date >= ?', ref_date)
@@ -66,6 +82,14 @@ class Payment < ActiveRecord::Base
   scope :date_lte, lambda { |ref_date|
     where('payments.date <= ?', ref_date)
   }
+
+  scope :deposit_date_gte, lambda { |ref_date|
+    where('payments.deposit_date >= ?', ref_date)
+  }
+
+  scope :deposit_date_lte, lambda { |ref_date|
+    where('payments.deposit_date <= ?', ref_date)
+  }  
 
   scope :amount_gte, lambda { |ref_amount|
     where('payments.amount_cents >= ?', ref_amount*100)
@@ -131,14 +155,23 @@ class Payment < ActiveRecord::Base
       ['Amount (largest first)', 'amount_desc'],
       ['Date (oldest first)', 'date_asc'],
       ['Date (newest first)', 'date_desc'],
+      ['Deposit Date (newest first)', 'deposit_date_asc'],
+      ['Deposit Date (oldest first)', 'deposit_date_desc'],
     ]
   end  
 
-  def self.options_for_dues_select
-    [
-      ['Dues Payments', true],
-      ['Non-Dues Payments', false]
+  def self.options_for_selection
+    array = [
+      ['Dues Payments', 'dues_true'],
+      ['Non-Dues Payments', 'dues_false'],
+      ['Missing Date', 'date_nil'],
+      ['Missing Deposit Date', 'depositdate_nil'],
+      ['Missing Kind', 'kind_']
     ]
+    Setting.where(lookup: "payment_kinds").first.value.scan(/\w+/).each do |k|
+      array << ["#{k.capitalize} Payment", "kind_#{k}"]
+    end
+    return array
   end
 
   def update_member_dues_paid

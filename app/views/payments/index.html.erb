@@ -32,10 +32,10 @@
       <%= f.date_field(:date_lte) %>
     </div>   
     <div class="small-3 columns">
-      Dues Selection
+      Select Payments
       <%= f.select(
-        :by_dues,
-        @filterrific.select_options[:by_dues],
+        :selection,
+        @filterrific.select_options[:selection],
         { include_blank: '- Any -' }
       ) %>
     </div> 
@@ -60,7 +60,7 @@
 <div class="small-12 columns medium-6">
 <h3>Import CSV for NEW Payments</h3>
 <p><strong>Required Headers:</strong> amount, date, member_first_name, member_last_name</p>
-<p><strong>Additional Headers:</strong> note, dues</p>
+<p><strong>Additional Headers:</strong> note, dues, deposit_date, kind</p>
   <%= form_tag import_new_payments_path, multipart: true do %>
     <%= file_field_tag :file, required: :true %>
     <%= submit_tag "Import CSV", class: "button small success radius" %>

@@ -87,10 +87,10 @@ class Payment < ActiveRecord::Base
 
   def self.to_csv
     CSV.generate do |csv|
-      columns = ["id", "date", "amount",  "member_id", "member_name", "note", "dues"]
+      columns = ["id", "date", "amount",  "member_id", "member_name", "note", "dues", "kind", "deposit_date"]
       csv << columns
       all.each do |payment|
-        information = payment.attributes.values_at("id", "date", "member_id", "note", "dues")
+        information = payment.attributes.values_at("id", "date", "member_id", "note", "dues", "kind", "deposit_date")
         information.insert(2, payment.amount_cents/100)
         information.insert(4, payment.member.full_name)
         csv << information
@@ -119,17 +119,18 @@ class Payment < ActiveRecord::Base
         not_created << "cannot find member - #{payment_hash["member_first_name"]} #{payment_hash["member_last_name"]}"
         next
       end
+      member = member.first
 
-      new_date = Date.parse(payment_hash["date"])
-      payment_hash["date"] = new_date      
-      
-      payment = member.first.payments.where("date >?", (payment_hash["date"] - 2.months)).where("date < ?", (payment_hash["date"] + 2.months)).where(amount_cents: (payment_hash["amount"].to_f * 100))
-      if payment.empty?
-        payment_hash = payment_hash.slice("amount", "date", "note", "dues")
-        payment_hash["member_id"] = member.first.id
+      payment_hash["date"] = Date.parse(payment_hash["date"]) 
+      payment_hash["deposit_date"] = Date.parse(payment_hash["deposit_date"]) unless payment_hash["deposit_date"].nil?
+
+      existing_payment = member.payments.where{(date > (payment_hash["date"] - 2.months)) & (date < (payment_hash["date"] + 2.months)) & (amount_cents == (payment_hash["amount"].to_f * 100))}
+      if existing_payment.empty?
+        payment_hash = payment_hash.slice("amount", "date", "note", "dues", "kind", "deposit_date")
+        payment_hash["member_id"] = member.id
         Payment.create!(payment_hash)
       else
-        not_created << "conflicts with another payment - #{payment_hash["member_first_name"]} #{payment_hash["member_last_name"]}"
+        not_created << "conflicts with another payment - #{payment_hash["member_first_name"]} #{payment_hash["member_last_name"]} #{payment_hash["amount"]}"
       end
     end # end CSV.foreach
     return not_created

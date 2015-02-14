@@ -25,9 +25,9 @@ class Member < ActiveRecord::Base
     direction = (sort_option =~ /desc$/) ? :desc : :asc
     case sort_option.to_s
     when /^zip_/
-      order(zip: direction)
+      order("zip #{direction} NULLS LAST") 
     when /^dues_/
-      order(dues_paid: direction)
+      order("dues_paid #{direction} NULLS LAST") 
     when /^name_/
       order(last_name: direction)
     else
@@ -126,7 +126,7 @@ class Member < ActiveRecord::Base
   end # end self.import(file)
 
   def self.options_for_zip_select
-    pluck(:zip).uniq.map { |e| [e, e] }
+    pluck(:zip).uniq.delete_if{|x| x.nil? || x.empty?}.sort.map { |e| [e, e] }
   end
 
   def self.options_for_sorted_by

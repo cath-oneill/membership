@@ -1,6 +1,10 @@
 class Member < ActiveRecord::Base
   has_many :payments
   has_many :notes
+  has_many :addresses
+  has_one  :primary_address, :class_name => "Address"
+
+  delegate :address, :address2, :city, :state, :zip, to: :primary_address
 
   serialize :clubs, Array
 
@@ -126,7 +130,7 @@ class Member < ActiveRecord::Base
   end # end self.import(file)
 
   def self.options_for_zip_select
-    pluck(:zip).uniq.delete_if{|x| x.nil? || x.empty?}.sort.map { |e| [e, e] }
+    joins(:primary_address).pluck(:zip).uniq.delete_if{|x| x.nil? || x.empty?}.sort.map { |e| [e, e] }
   end
 
   def self.options_for_sorted_by

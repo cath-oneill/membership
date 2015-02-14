@@ -11,18 +11,30 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150210025037) do
+ActiveRecord::Schema.define(version: 20150214231126) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "members", force: true do |t|
-    t.string   "first_name"
-    t.string   "last_name"
+  create_table "addresses", force: true do |t|
     t.string   "address"
+    t.string   "address2"
     t.string   "city"
     t.string   "state"
     t.string   "zip"
+    t.boolean  "skip_mail"
+    t.string   "addressee"
+    t.string   "greeting"
+    t.integer  "member_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "addresses", ["member_id"], name: "index_addresses_on_member_id", using: :btree
+
+  create_table "members", force: true do |t|
+    t.string   "first_name"
+    t.string   "last_name"
     t.string   "email"
     t.string   "email2"
     t.string   "cell_phone"
@@ -34,12 +46,12 @@ ActiveRecord::Schema.define(version: 20150210025037) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.date     "dues_paid"
-    t.string   "address2"
-    t.boolean  "skip_mail"
-    t.string   "mail_name"
-    t.string   "greeting"
     t.text     "clubs"
+    t.string   "middle_name"
+    t.integer  "primary_address_id"
   end
+
+  add_index "members", ["primary_address_id"], name: "index_members_on_primary_address_id", using: :btree
 
   create_table "notes", force: true do |t|
     t.text     "content"

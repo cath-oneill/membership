@@ -25,10 +25,10 @@
   </p>
   <% end %>
 
-  <% unless @member.clubs.blank? %>
+  <% unless @member.tag_list.empty? %>
   <p>
     <strong>Clubs:</strong>
-    <%= combine_with_commas(@member.clubs) %>
+    <%= combine_with_commas(@member.tag_list) %>
   </p>
   <% end %>
   </div>

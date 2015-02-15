@@ -6,10 +6,7 @@ class Member < ActiveRecord::Base
 
   delegate :address, :address2, :city, :state, :zip, :skip_mail, to: :primary_address, allow_nil: true
 
-  serialize :clubs, Array
-
   validates :first_name, :last_name, :presence => true
-  validate  :all_clubs_are_valid
 
   before_save :check_for_duplicate_member
 
@@ -181,17 +178,7 @@ class Member < ActiveRecord::Base
     Member.find(id).full_name
   end
 
-  private
-  def all_clubs_are_valid
-    unless self.clubs.blank?
-       self.clubs.each do |club|
-          unless Setting.list_values("other_clubs").include?(club)
-             errors.add(:clubs, "#{club} is not valid")
-          end
-       end
-    end
-   end  
-
+  private 
   def set_date(date_string)
     return Date.today if date_string.nil?
     Date.parse(date_string)

@@ -47,7 +47,7 @@ class MembersController < ApplicationController
   # POST /members.json
   def create
     @member = Member.new(member_params)
-    @member.tag_list.add(member_tag_params["tag_list"], parse: true)
+    @member.tag_list = member_tag_params["tag_list"]
     respond_to do |format|
       if @member.save
         format.html { redirect_to @member, notice: 'Member was successfully created.' }
@@ -62,9 +62,10 @@ class MembersController < ApplicationController
   # PATCH/PUT /members/1
   # PATCH/PUT /members/1.json
   def update
+    @member.tag_list = member_tag_params["tag_list"] 
+    @member.attributes = member_params
     respond_to do |format|
-      if  @member.tag_list.add(member_tag_params["tag_list"], parse: true) && 
-          @member.update(member_params) 
+      if @member.save
             format.html { redirect_to @member, notice: 'Member was successfully updated.' }
             format.json { render :show, status: :ok, location: @member }
       else

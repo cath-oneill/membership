@@ -11,14 +11,17 @@ class Member < ActiveRecord::Base
   validates :first_name, :last_name, :presence => true
   validate  :all_clubs_are_valid
 
+  acts_as_taggable_on :tags
+
   filterrific(
     default_filter_params: { sorted_by: 'name_asc' },
     available_filters: [
       :search_query,
       :sorted_by,
-      :by_zip_code,
+      :zip_select,
       :last_dues_paid_gte,
-      :selection
+      :mail_select,
+      :tag_select
     ]
   )
 
@@ -51,11 +54,11 @@ class Member < ActiveRecord::Base
     where{dues_paid >= ref_date}
   }
 
-  scope :by_zip_code, lambda { |zip|
+  scope :zip_select, lambda { |zip|
     joins(:primary_address).where{primary_address.zip == zip.to_s}
   }
 
-  scope :selection, lambda { |keyword|
+  scope :mail_select, lambda { |keyword|
     case keyword
     when "skipmail"
       uniq.joins(:addresses).where{(addresses.skip_mail == true)}
@@ -67,6 +70,10 @@ class Member < ActiveRecord::Base
       raise(ArgumentError, "Invalid sort option: #{ sort_option.inspect }")
     end
   }  
+
+  scope :tag_select, lambda {|tag|
+    tagged_with(tag)
+  }
 
   def self.to_csv
     CSV.generate do |csv|
@@ -148,13 +155,17 @@ class Member < ActiveRecord::Base
     ]
   end  
 
-  def self.options_for_selection
+  def self.options_for_mail_select
     [
       ['Skip Mail', 'skipmail'],
       ['Custom Addressee', 'addressee'],
       ['Custom Greeting', 'greeting'],
     ]
   end  
+
+  def self.options_for_tag_select
+    ActsAsTaggableOn::Tag.all.map { |tag| [tag.name, tag.name] }
+  end
 
   def full_name
     "#{first_name} #{last_name}"

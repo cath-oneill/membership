@@ -9,8 +9,9 @@ class MembersController < ApplicationController
       params[:filterrific],
       :select_options => {
         sorted_by:    Member.options_for_sorted_by,
-        by_zip_code:  Member.options_for_zip_select,
-        selection:    Member.options_for_selection
+        zip_select:   Member.options_for_zip_select,
+        mail_select:  Member.options_for_mail_select,
+        tag_select:   Member.options_for_tag_select
       }) or return
     @members = @filterrific.find.page(params[:page])
     @members_for_csv = @filterrific.find
@@ -101,7 +102,7 @@ class MembersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def member_params
-      params.require(:member).permit(:first_name, :last_name, :email, :email2, :cell_phone, :home_phone, :work_phone, :employer, :occupation, :title, :dues_paid)
+      params.require(:member).permit(:first_name, :last_name, :email, :email2, :cell_phone, :home_phone, :work_phone, :employer, :occupation, :title, :dues_paid, :tag_list => [])
     end
 
     def formatted_member_params

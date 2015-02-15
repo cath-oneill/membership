@@ -12,10 +12,10 @@
     <%= f.select(:sorted_by, @filterrific.select_options[:sorted_by]) %>
   </div>  
   <div class = "small-3 columns">
-    Select By Mail Options
+    Mail Options Selection
     <%= f.select(
-      :selection, 
-      @filterrific.select_options[:selection],
+      :mail_select, 
+      @filterrific.select_options[:mail_select],
       { include_blank: '- Any -' }) %>
   </div>   
   <div class= "small-3 columns">
@@ -25,8 +25,15 @@
   <div class="small-3 columns">
     Zip Code Selection
     <%= f.select(
-      :by_zip_code,
-      @filterrific.select_options[:by_zip_code],
+      :zip_select,
+      @filterrific.select_options[:zip_select],
+      { include_blank: '- Any -' }) %>
+  </div>
+  <div class="small-3 columns">
+    Tag Selection
+    <%= f.select(
+      :tag_select,
+      @filterrific.select_options[:tag_select],
       { include_blank: '- Any -' }) %>
   </div>
   <div class="right">

@@ -1,0 +1,22 @@
+<caption><%= member.first_name %>'s Addresses</caption>
+<table>
+  <thead>
+    <tr>
+      <th width="100">Primary</th>
+      <th width="300">Address</th>
+      <th width="300">Mailing Info</th>
+      <th colspan="1"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% member.addresses.each do |address| %>
+      <tr>
+        <td><% if address.id == member.primary_address_id %><%= "YES" %><% end %></td>
+        <td><%= combine_with_commas([address.address, address.address2, address.city, address.state, address.zip]) %></td>
+        <td><%= mail_view(address) %></td>
+        <td><%= link_to 'Edit', edit_member_payment_path(member, address), class: "tiny info button round" %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

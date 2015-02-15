@@ -1,0 +1,20 @@
+<caption><%= member.first_name %>'s Notes</caption>
+<table class="expand">
+  <thead>
+    <tr>
+      <th width="500">Content</th>
+      <th width="200">Date</th>
+      <th colspan="1"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% member.notes.each do |note| %>
+      <tr>
+        <td><%= note.content %></td>
+        <td><%= note.date %></td>
+        <td><%= link_to 'Edit', edit_member_note_path(member, note), class: "tiny info button round" %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

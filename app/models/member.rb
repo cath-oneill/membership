@@ -4,7 +4,7 @@ class Member < ActiveRecord::Base
   has_many :addresses
   has_one  :primary_address, :class_name => "Address"
 
-  delegate :address, :address2, :city, :state, :zip, to: :primary_address, allow_nil: true
+  delegate :address, :address2, :city, :state, :zip, :skip_mail, to: :primary_address, allow_nil: true
 
   serialize :clubs, Array
 
@@ -149,22 +149,6 @@ class Member < ActiveRecord::Base
 
   def name_with_title
     ([title, first_name, last_name] - [nil, ""]).join(" ")
-  end
-
-  def calculated_mail_name
-    if mail_name.blank?
-      return name_with_title
-    else
-      return mail_name
-    end
-  end
-
-  def calculated_greeting
-    if greeting.blank?
-      return first_name
-    else
-      return greeting
-    end
   end
 
   private

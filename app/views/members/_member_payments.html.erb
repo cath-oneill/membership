@@ -1,0 +1,29 @@
+<caption><%= member.first_name %>'s Payments</caption>
+<table>
+  <thead>
+    <tr>
+      <th width="100">Date</th>
+      <th width="100">Amount</th>
+      <th width="100">Dues?</th>
+      <th width="400">Note</th>
+      <th colspan="1"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% member.payments.order(date: :desc).each do |payment| %>
+      <tr>
+        <td><%= payment.date %></td>
+        <td>$<%= payment.amount %></td>
+        <td><% if payment.dues %>
+              <%= "YES" %>
+            <% else %>
+              <%= "NO" %>
+            <% end %>
+        </td>
+        <td><%= payment.note %></td>
+        <td><%= link_to 'Edit', edit_member_payment_path(member, payment), class: "tiny info button round" %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

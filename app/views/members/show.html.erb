@@ -1,101 +1,63 @@
 <h1><%= combine_with_space([@member.title, @member.first_name, @member.last_name]) %></h1>
 
-<div class="panel">
 
-<% unless @member.address.blank? && @member.address2.blank? && @member.zip.blank? %>  
-<p>
-  <strong>Address:</strong>
-  <%= combine_with_commas([@member.address, @member.city, @member.state, @member.zip]) %>
-</p>
-<% end %>
+<div class =  "small-12 columns medium-8">
+  <div class="panel">
 
-<% unless @member.email.blank? && @member.email2.blank? %>
-<p>
-  <strong>Email Address(es):</strong>
-  <%= combine_with_commas([@member.email, @member.email2])%>
-</p>
-<% end %>
+  <% unless @member.email.blank? && @member.email2.blank? %>
+  <p>
+    <strong>Email Address(es):</strong>
+    <%= combine_with_commas([@member.email, @member.email2])%>
+  </p>
+  <% end %>
 
-<% unless @member.cell_phone.blank? && @member.home_phone.blank? && @member.work_phone.blank? %>
-<p>
-  <strong>Phone Numbers:</strong>
-  <%= phone_list %>
-</p>
-<% end %>
+  <% unless @member.cell_phone.blank? && @member.home_phone.blank? && @member.work_phone.blank? %>
+  <p>
+    <strong>Phone Numbers:</strong>
+    <%= phone_list %>
+  </p>
+  <% end %>
 
-<% unless @member.employer.blank? && @member.occupation.blank? %>
-<p>
-  <strong>Employment:</strong>
-  <%= combine_with_commas([@member.occupation, @member.employer]) %>
-</p>
-<% end %>
+  <% unless @member.employer.blank? && @member.occupation.blank? %>
+  <p>
+    <strong>Employment:</strong>
+    <%= combine_with_commas([@member.occupation, @member.employer]) %>
+  </p>
+  <% end %>
 
-<p>
-  <strong>Mailing Info:</strong>
-  <%= mail_view %>
-</p>
+  <% unless @member.clubs.blank? %>
+  <p>
+    <strong>Clubs:</strong>
+    <%= combine_with_commas(@member.clubs) %>
+  </p>
+  <% end %>
+  </div>
 
-<% unless @member.clubs.blank? %>
-<p>
-  <strong>Clubs:</strong>
-  <%= combine_with_commas(@member.clubs) %>
-</p>
-<% end %>
+  <% if @member.addresses.present? %>
+    <%= render(
+      partial: 'members/member_addresses',
+      locals: { member: @member }
+    ) %>
+  <% end %>
+
+  <% if @member.payments.present? %>
+    <%= render(
+      partial: 'members/member_payments',
+      locals: { member: @member }
+    ) %>
+  <% end %>
+
+  <% if @member.notes.present? %>
+    <%= render(
+      partial: 'members/member_notes',
+      locals: { member: @member }
+    ) %>
+  <% end %>
 </div>
 
-<h3><%= @member.first_name %>'s Payments:</h3>
-<table>
-  <thead>
-    <tr>
-      <th>Date</th>
-      <th>Amount</th>
-      <th>Dues?</th>
-      <th>Note</th>
-      <th colspan="1"></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @member.payments.order(date: :desc).each do |payment| %>
-      <tr>
-        <td><%= payment.date %></td>
-        <td>$<%= payment.amount %></td>
-        <td><% if payment.dues %>
-              <%= "YES" %>
-            <% else %>
-              <%= "NO" %>
-            <% end %>
-        </td>
-        <td><%= payment.note %></td>
-        <td><%= link_to 'Edit', edit_member_payment_path(@member, payment), class: "tiny info button round" %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-
-<h3><%= @member.first_name %>'s Notes:</h3>
-<table>
-  <thead>
-    <tr>
-      <th>Content</th>
-      <th>Date</th>
-      <th colspan="1"></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @member.notes.each do |note| %>
-      <tr>
-        <td><%= note.content %></td>
-        <td><%= note.date %></td>
-        <td><%= link_to 'Edit', edit_member_note_path(@member, note) %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-
-
-<%= link_to 'Edit Member Info', edit_member_path(@member), class: "button success radius" %> 
-<%= link_to 'Add New Payment', new_member_payment_path(@member), class: "button success radius" %> 
-<%= link_to 'Add New Note', new_member_note_path(@member), class: "button success radius" %>
+<div class="medium-3 columns right">
+<%= link_to 'Edit Member Info', edit_member_path(@member), class: "button success radius expand" %> 
+<%= link_to 'Add New Payment', new_member_payment_path(@member), class: "button success radius expand" %> 
+<%= link_to 'Add New Note', new_member_note_path(@member), class: "button success radius expand" %>
+</div>
 <br>

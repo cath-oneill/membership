@@ -11,6 +11,8 @@ class Member < ActiveRecord::Base
   validates :first_name, :last_name, :presence => true
   validate  :all_clubs_are_valid
 
+  before_save :check_for_duplicate_member
+
   acts_as_taggable_on :tags
 
   filterrific(
@@ -168,7 +170,7 @@ class Member < ActiveRecord::Base
   end
 
   def full_name
-    "#{first_name} #{last_name}"
+    ([first_name, middle_name, last_name] - [nil, ""]).join(" ")
   end
 
   def name_with_title
@@ -194,5 +196,18 @@ class Member < ActiveRecord::Base
     return Date.today if date_string.nil?
     Date.parse(date_string)
   end  
+
+  def check_for_duplicate_member
+    first, middle, last, i = first_name, middle_name, last_name, id
+    if middle.blank? && Member.where{(first_name =~ "%#{first}%") & (last_name =~ "#{last}%") & (id != i)}.present?
+      errors.add("Another member of same name")
+      return false
+    elsif Member.where{(first_name =~ "%#{first}%") & (middle_name =~ "%#{middle}%") & (last_name =~ "#{last}%") & (id != i)}.present?
+      errors.add("Another member of same name") 
+      return false
+    else
+      return true
+    end
+  end
 
 end

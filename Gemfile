@@ -33,6 +33,8 @@ gem 'devise'
 gem 'filterrific', '~> 2.0.0'
 gem 'will_paginate', '~> 3.0.6'
 
+gem 'acts-as-taggable-on', '~> 3.4'
+
 
 group :development do
   gem 'better_errors'

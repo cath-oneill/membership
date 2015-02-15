@@ -11,6 +11,13 @@
     Sorted by
     <%= f.select(:sorted_by, @filterrific.select_options[:sorted_by]) %>
   </div>  
+  <div class = "small-3 columns">
+    Select By Mail Options
+    <%= f.select(
+      :selection, 
+      @filterrific.select_options[:selection],
+      { include_blank: '- Any -' }) %>
+  </div>   
   <div class= "small-3 columns">
     Dues Paid After
     <%= f.date_field(:last_dues_paid_gte) %>
@@ -20,16 +27,12 @@
     <%= f.select(
       :by_zip_code,
       @filterrific.select_options[:by_zip_code],
-      { include_blank: '- Any -' }
-    ) %>
-    <%# See below for the Country.options_for_select presenter method %>
+      { include_blank: '- Any -' }) %>
   </div>
   <div class="right">
       <%= link_to('Reset filters', reset_filterrific_url, class: "button round tiny info button-down") %>
       <%= link_to 'Export As CSV', url_options = {action: "index", format: "csv"}, html_options = {class: "button round tiny success button-down"} %>
   </div>
-
-  <%# add an automated spinner to your form when the list is refreshed %>
   <%= render_filterrific_spinner %>
 <% end %>
 </div>

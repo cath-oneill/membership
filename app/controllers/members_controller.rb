@@ -8,8 +8,9 @@ class MembersController < ApplicationController
       Member,
       params[:filterrific],
       :select_options => {
-        sorted_by: Member.options_for_sorted_by,
-        by_zip_code: Member.options_for_zip_select
+        sorted_by:    Member.options_for_sorted_by,
+        by_zip_code:  Member.options_for_zip_select,
+        selection:    Member.options_for_selection
       }) or return
     @members = @filterrific.find.page(params[:page])
     @members_for_csv = @filterrific.find

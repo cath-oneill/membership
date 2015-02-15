@@ -17,7 +17,8 @@ class Member < ActiveRecord::Base
       :search_query,
       :sorted_by,
       :by_zip_code,
-      :last_dues_paid_gte
+      :last_dues_paid_gte,
+      :selection
     ]
   )
 
@@ -53,6 +54,19 @@ class Member < ActiveRecord::Base
   scope :by_zip_code, lambda { |zip|
     joins(:primary_address).where{primary_address.zip == zip.to_s}
   }
+
+  scope :selection, lambda { |keyword|
+    case keyword
+    when "skipmail"
+      uniq.joins(:addresses).where{(addresses.skip_mail == true)}
+    when "greeting"
+      uniq.joins(:addresses).where{(addresses.greeting != nil) & (addresses.greeting != "")}
+    when "addressee"
+      uniq.joins(:addresses).where{(addresses.addressee != nil) & (addresses.addressee != "")}  
+    else
+      raise(ArgumentError, "Invalid sort option: #{ sort_option.inspect }")
+    end
+  }  
 
   def self.to_csv
     CSV.generate do |csv|
@@ -140,6 +154,14 @@ class Member < ActiveRecord::Base
       ['Dues Last Paid (oldest first)', 'dues_asc'],
       ['Dues Last Paid (newest first)', 'dues_desc'],
       ['Zip Code', 'zip_asc'],
+    ]
+  end  
+
+  def self.options_for_selection
+    [
+      ['Skip Mail', 'skipmail'],
+      ['Custom Addressee', 'addressee'],
+      ['Custom Greeting', 'greeting'],
     ]
   end  
 

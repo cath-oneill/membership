@@ -46,8 +46,8 @@ class MembersController < ApplicationController
   # POST /members
   # POST /members.json
   def create
-    @member = Member.new(formatted_member_params)
-
+    @member = Member.new(member_params)
+    @member.tag_list.add(member_tag_params["tag_list"], parse: true)
     respond_to do |format|
       if @member.save
         format.html { redirect_to @member, notice: 'Member was successfully created.' }
@@ -62,11 +62,11 @@ class MembersController < ApplicationController
   # PATCH/PUT /members/1
   # PATCH/PUT /members/1.json
   def update
-    p member_params
     respond_to do |format|
-      if @member.update(formatted_member_params)
-        format.html { redirect_to @member, notice: 'Member was successfully updated.' }
-        format.json { render :show, status: :ok, location: @member }
+      if  @member.tag_list.add(member_tag_params["tag_list"], parse: true) && 
+          @member.update(member_params) 
+            format.html { redirect_to @member, notice: 'Member was successfully updated.' }
+            format.json { render :show, status: :ok, location: @member }
       else
         format.html { render :edit }
         format.json { render json: @member.errors, status: :unprocessable_entity }
@@ -102,15 +102,10 @@ class MembersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def member_params
-      params.require(:member).permit(:first_name, :last_name, :email, :email2, :cell_phone, :home_phone, :work_phone, :employer, :occupation, :title, :dues_paid, :tag_list => [])
+      params.require(:member).permit(:first_name, :last_name, :email, :email2, :cell_phone, :home_phone, :work_phone, :employer, :occupation, :title, :dues_paid)
     end
 
-    def formatted_member_params
-      clubs = params["clubs"]
-      new_params = member_params
-      unless clubs.nil?
-        new_params["clubs"] = clubs.keys
-      end
-      new_params
+    def member_tag_params
+      params.require(:member).permit(:tag_list)
     end
 end

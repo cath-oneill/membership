@@ -38,19 +38,14 @@
           <%= f.text_field :title, placeholder: "Not Required" %>
         </div>
       </div>   
-      <br><br>       
-      <h5>Other Club Memberships</h5>
-      <div class="field row panel">
-      <% other_clubs.each do |c| %>
-        <% if @member.clubs.include?(c) %>
-          <%= check_box_tag("clubs[#{c}]", c, {checked: true}) %>
-          <label for=<%= c %>><%= c %></label>     
-        <% else %>
-          <%= check_box_tag("clubs[#{c}]", c) %>
-          <label for=<%= c %>><%= c %></label>     
-        <% end %>
-      <% end %>
-      </div>         
+      <div class="field row">
+        <div class="small-4 columns">
+          <%= f.label :tag_list, "Tags (separated by commas)", class: "right"%><br>
+        </div>
+        <div class="small-8 columns end">
+          <%= f.text_field :tag_list %>       
+        </div>
+      </div>   
     </div>
 
     <div class="columns small-12 medium-6 large-4">

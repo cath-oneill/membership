@@ -1,6 +1,8 @@
 class Address < ActiveRecord::Base
   belongs_to :member
 
+  before_save :update_number
+
   def calculated_addressee
     if addressee.blank?
       return member.name_with_title
@@ -15,6 +17,26 @@ class Address < ActiveRecord::Base
     else
       return greeting
     end
+  end
+
+  def self.duplicated_address_csv
+    CSV.generate do |csv|
+      csv << (["address", "zip", "member"])
+      duplicated_addresses.each do |duplicate|
+        Address.where(number: duplicate.number, zip: duplicate.zip).find_each do |address|
+          csv << [address.address, address.zip, Member.get_name_by_id(address.member_id)]
+        end
+      end
+    end
+  end
+
+  def self.duplicated_addresses
+    where.not(address: [nil, ""]).select([:number, :zip]).group([:number, :zip]).having("count(*) > 1")
+  end
+
+  private
+  def update_number
+    self.number = address[/\d+/].to_i
   end
 
 end

@@ -35,6 +35,13 @@ class AddressesController < ApplicationController
     end
   end
 
+  def duplicate_address_report
+    @duplicates = Address.duplicated_addresses
+    respond_to do |format|
+      format.csv {render text: @duplicates.duplicated_address_csv}
+    end
+  end  
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_address

@@ -79,15 +79,6 @@ class Member < ActiveRecord::Base
       end
     end
   end
-    
-  def self.duplicated_address_csv
-    CSV.generate do |csv|
-      csv << (["address"])
-      all.each do |duplicate|
-        csv << [duplicate.address]
-      end
-    end
-  end
 
   def self.import_new(file)
     not_created = []
@@ -171,6 +162,10 @@ class Member < ActiveRecord::Base
 
   def name_with_title
     ([title, first_name, last_name] - [nil, ""]).join(" ")
+  end
+
+  def self.get_name_by_id(id)
+    Member.find(id).full_name
   end
 
   private

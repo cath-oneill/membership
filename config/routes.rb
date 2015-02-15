@@ -12,10 +12,13 @@ Rails.application.routes.draw do
   
   resources :members, except: [:destroy] do
     collection { post :import_new, :import_update }
-    collection { get :duplicate_address_report }
     resources :payments, only: [:new, :create, :edit, :update, :destroy]
     resources :notes, only: [:new, :create, :edit, :update]
-    resources :addresses, only: [:new, :create, :edit, :update]
+    resources :addresses, only: [:new, :create, :edit, :update]  
+  end
+
+  resources :addresses, only: [] do
+    collection { get :duplicate_address_report }
   end
 
   resources :payments, only: [:index] do

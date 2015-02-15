@@ -4,7 +4,7 @@ class Member < ActiveRecord::Base
   has_many :addresses
   has_one  :primary_address, :class_name => "Address"
 
-  delegate :address, :address2, :city, :state, :zip, to: :primary_address
+  delegate :address, :address2, :city, :state, :zip, to: :primary_address, allow_nil: true
 
   serialize :clubs, Array
 
@@ -29,7 +29,7 @@ class Member < ActiveRecord::Base
     direction = (sort_option =~ /desc$/) ? :desc : :asc
     case sort_option.to_s
     when /^zip_/
-      order("zip #{direction} NULLS LAST") 
+      joins{primary_address.outer}.order("zip #{direction} NULLS LAST") 
     when /^dues_/
       order("dues_paid #{direction} NULLS LAST") 
     when /^name_/
@@ -43,7 +43,7 @@ class Member < ActiveRecord::Base
     return nil  if query.blank?
     # condition query, parse into individual keywords
     q = query.split(" ").map{|x| "%#{x}%"}
-    uniq.joins{notes}.where{(first_name.like_any q) | (last_name.like_any q) | (notes.content.like_any q)}
+    uniq.joins{notes.outer}.where{(first_name.like_any q) | (last_name.like_any q) | (notes.content.like_any q)}
   }
 
   scope :last_dues_paid_gte, lambda { |ref_date|
@@ -51,7 +51,7 @@ class Member < ActiveRecord::Base
   }
 
   scope :by_zip_code, lambda { |zip|
-    where(zip: zip.to_s)
+    joins(:primary_address).where{primary_address.zip == zip.to_s}
   }
 
   def self.to_csv

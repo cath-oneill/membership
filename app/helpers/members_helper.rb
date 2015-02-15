@@ -22,7 +22,7 @@ module MembersHelper
     elsif address.addressee.blank? && address.greeting.blank?
       return "DEFAULT MAILING INFO"
     else
-      return "Addressee: #{address.calculated_addressee} | Greeting: #{addressee.calculated_greeting}"
+      return "Addressee: #{address.calculated_addressee} | Greeting: #{address.calculated_greeting}"
     end
   end
 end

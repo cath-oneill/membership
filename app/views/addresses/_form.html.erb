@@ -1,0 +1,104 @@
+<h4><strong>Address for Member:</strong> <%= @member.first_name %> <%= @member.last_name %></h4>
+
+
+<%= form_for([@member, @address]) do |f| %>
+  <% if @address.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@address.errors.count, "error") %> prohibited this address from being saved:</h2>
+
+      <ul>
+      <% @address.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="row">
+    <div class="columns small-12 medium-6 large-4">
+      <h5>Member Address</h5>
+      <div class="field row">
+        <div class="small-4 columns">
+          <%= f.label :address, class: "right"%><br>
+        </div>
+        <div class="small-8 columns end">
+          <%= f.text_field :address, :required => true %>
+        </div>
+      </div>
+      <div class="field row">
+        <div class="small-4 columns">
+          <%= f.label :address2, class: "right"%><br>
+        </div>
+        <div class="small-8 columns end">
+          <%= f.text_field :address2, placeholder: "Not Required" %>
+        </div>
+      </div>
+      <div class="field row">
+        <div class="small-4 columns">
+          <%= f.label :city, class: "right"%><br>
+        </div>
+        <div class="small-8 columns end">
+          <%= f.text_field :city, value: "Austin", :required => true %>
+        </div>
+      </div>
+      <div class="field row">
+        <div class="small-4 columns">
+          <%= f.label :state, class: "right"%><br>
+        </div>
+        <div class="small-8 columns end">
+          <%= f.text_field :state, value: "TX", :required => true %>
+        </div>
+      </div>
+      <div class="field row">
+        <div class="small-4 columns">
+          <%= f.label :zip, class: "right"%><br>
+        </div>
+        <div class="small-8 columns end">
+          <%= f.text_field :zip, :required => true %>
+        </div>
+      </div>   
+    </div>
+    <div class="columns small-12 medium-6 large-4 end">         
+      <h5>Mailing Information</h5>
+      <div class="field row">
+        <div class="small-8 columns">
+          <label for="primary" class="right">Skip Mail</label>  
+        </div>
+        <div class="small-4 columns end">
+          <%= f.check_box :skip_mail %>
+        </div>
+      </div>
+      <div class="field row">
+        <div class="small-8 columns">
+          <label for="primary" class="right">Primary Address</label>  
+        </div>
+        <div class="small-4 columns end">
+          <% if @member.primary_address_id == @address.id %>
+            <%= check_box_tag :primary, {checked: true} %>
+          <% else %>
+            <%= check_box_tag :primary %>
+          <% end %>
+        </div>
+      </div>             
+      <div class="field row">
+        <div class="small-4 columns">
+          <%= f.label :addressee, class: "right"%><br>
+        </div>
+        <div class="small-8 columns end">
+          <%= f.text_field :addressee, placeholder: "currently default value" %>
+        </div>
+      </div>
+      <div class="field row">
+        <div class="small-4 columns">
+          <%= f.label :greeting, class: "right"%><br>
+        </div>
+        <div class="small-8 columns end">
+          <%= f.text_field :greeting, placeholder: "currently default value" %>
+        </div>
+      </div>    
+      <div class="actions row">
+        <%= f.submit class: "button radius success right" %>
+      </div>
+    </div>
+  </div>
+<% end %>

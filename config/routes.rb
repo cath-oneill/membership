@@ -15,6 +15,7 @@ Rails.application.routes.draw do
     collection { get :duplicate_address_report }
     resources :payments, only: [:new, :create, :edit, :update, :destroy]
     resources :notes, only: [:new, :create, :edit, :update]
+    resources :addresses, only: [:new, :create, :edit, :update]
   end
 
   resources :payments, only: [:index] do

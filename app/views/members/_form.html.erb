@@ -32,52 +32,25 @@
       </div>
       <div class="field row">
         <div class="small-4 columns">
-          <%= f.label :address, class: "right"%><br>
-        </div>
-        <div class="small-8 columns end">
-          <%= f.text_field :address, :required => true %>
-        </div>
-      </div>
-      <div class="field row">
-        <div class="small-4 columns">
-          <%= f.label :address2, class: "right"%><br>
-        </div>
-        <div class="small-8 columns end">
-          <%= f.text_field :address2, placeholder: "Not Required" %>
-        </div>
-      </div>
-      <div class="field row">
-        <div class="small-4 columns">
-          <%= f.label :city, class: "right"%><br>
-        </div>
-        <div class="small-8 columns end">
-          <%= f.text_field :city, value: "Austin", :required => true %>
-        </div>
-      </div>
-      <div class="field row">
-        <div class="small-4 columns">
-          <%= f.label :state, class: "right"%><br>
-        </div>
-        <div class="small-8 columns end">
-          <%= f.text_field :state, value: "TX", :required => true %>
-        </div>
-      </div>
-      <div class="field row">
-        <div class="small-4 columns">
-          <%= f.label :zip, class: "right"%><br>
-        </div>
-        <div class="small-8 columns end">
-          <%= f.text_field :zip, :required => true %>
-        </div>
-      </div>
-      <div class="field row">
-        <div class="small-4 columns">
           <%= f.label :title, class: "right"%><br>
         </div>
         <div class="small-8 columns end">
           <%= f.text_field :title, placeholder: "Not Required" %>
         </div>
-      </div>      
+      </div>   
+      <br><br>       
+      <h5>Other Club Memberships</h5>
+      <div class="field row panel">
+      <% other_clubs.each do |c| %>
+        <% if @member.clubs.include?(c) %>
+          <%= check_box_tag("clubs[#{c}]", c, {checked: true}) %>
+          <label for=<%= c %>><%= c %></label>     
+        <% else %>
+          <%= check_box_tag("clubs[#{c}]", c) %>
+          <label for=<%= c %>><%= c %></label>     
+        <% end %>
+      <% end %>
+      </div>         
     </div>
 
     <div class="columns small-12 medium-6 large-4">
@@ -122,19 +95,6 @@
           <%= f.telephone_field :work_phone %>
         </div>
       </div>
-      <br><br>       
-      <h5>Other Club Memberships</h5>
-      <div class="field row panel">
-      <% other_clubs.each do |c| %>
-        <% if @member.clubs.include?(c) %>
-          <%= check_box_tag("clubs[#{c}]", c, {checked: true}) %>
-          <label for=<%= c %>><%= c %></label>     
-        <% else %>
-          <%= check_box_tag("clubs[#{c}]", c) %>
-          <label for=<%= c %>><%= c %></label>     
-        <% end %>
-      <% end %>
-      </div>
     </div>
 
     <div class="columns small-12 medium-6 large-4">
@@ -155,32 +115,7 @@
           <%= f.text_field :occupation, :required => true %>
         </div>
       </div>
-      <br><br>
-      <h5>Mailing Information</h5>
-      <div class="field row">
-        <div class="small-4 columns">
-          <%= f.label :skip_mail, class: "right"%><br>
-        </div>
-        <div class="small-8 columns end">
-          <%= f.check_box :skip_mail %>
-        </div>
-      </div>
-      <div class="field row">
-        <div class="small-4 columns">
-          <%= f.label :mail_name, class: "right"%><br>
-        </div>
-        <div class="small-8 columns end">
-          <%= f.text_field :mail_name, placeholder: "currently default value" %>
-        </div>
-      </div>
-      <div class="field row">
-        <div class="small-4 columns">
-          <%= f.label :greeting, class: "right"%><br>
-        </div>
-        <div class="small-8 columns end">
-          <%= f.text_field :greeting, placeholder: "currently default value" %>
-        </div>
-      </div>      
+      <br><br>   
       <div class="actions row">
         <%= f.submit class: "button radius success right" %>
       </div>

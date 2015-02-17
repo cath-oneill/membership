@@ -118,9 +118,13 @@ class Member < ActiveRecord::Base
       member = Member.where(first_name: member_hash["first_name"], last_name: member_hash["last_name"])
 
       if member.empty?
-        Member.create!(member_hash)
+        member_attributes  =  member_hash.select{|k, v| Member.columns.map(&:name).include?(k)}
+        address_attributes =  member_hash.select{|k, v| Address.columns.map(&:name).include?(k)}
+        new_member                 = Member.create!(member_attributes)
+        new_member.primary_address = Address.create!(address_attributes)
+        new_member.update(primary_address_id: new_member.primary_address.id)
       else
-        not_created << "cannot find member - #{member_hash["first_name"]} #{member_hash["last_name"]}"
+        not_created << "member already exists - #{member_hash["first_name"]} #{member_hash["last_name"]}"
       end
     end # end CSV.foreach
     return not_created

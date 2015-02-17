@@ -21,7 +21,7 @@
       <% @members.each do |member| %>
         <tr>
           <td><%= "#{member.first_name} #{member.last_name}" %></td>
-          <td><%= member.address %></td>
+          <td><%= member.address1 %></td>
           <td><%= member.zip %></td>
           <td><%= member.dues_paid %></td>
           <td><%= link_to 'Show', member_path(member), class: "tiny round info button" %></td>

@@ -57,7 +57,7 @@
 <div class="small-12 columns medium-6">
 <h3>Import CSV for NEW Members</h3>
 <p><strong>Required Headers:</strong> first_name, last_name</p>
-<p><strong>Additional Headers:</strong> address, address2, city, state, zip, email, email2, cell_phone, home_phone, work_phone, employer, occupation, dues_paid, skip_mail, greeting, mail_name</p>
+<p><strong>Additional Headers:</strong> address1, address2, city, state, zip, email, email2, cell_phone, home_phone, work_phone, employer, occupation, dues_paid, skip_mail, greeting, mail_name</p>
   <%= form_tag import_new_members_path, multipart: true do %>
     <%= file_field_tag :file, required: :true %>
     <%= submit_tag "Import CSV", class: "button small success radius" %>

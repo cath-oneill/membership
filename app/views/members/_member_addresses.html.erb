@@ -13,7 +13,7 @@
     <% member.addresses.each do |address| %>
       <tr>
         <td><% if address.id == member.primary_address_id %><%= "YES" %><% end %></td>
-        <td><%= combine_with_commas([address.address, address.address2, address.city, address.state, address.zip]) %></td>
+        <td><%= combine_with_commas([address.address1, address.address2, address.city, address.state, address.zip]) %></td>
         <td><%= mail_view(address) %></td>
         <td><%= link_to 'Edit', edit_member_address_path(member, address), class: "tiny info button round" %></td>
       </tr>

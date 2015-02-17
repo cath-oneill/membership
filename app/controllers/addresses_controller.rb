@@ -54,7 +54,7 @@ class AddressesController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def address_params
-      params.require(:address).permit(:address, :address2, :city, :state, :zip,  :skip_mail, :addressee, :greeting)
+      params.require(:address).permit(:address1, :address2, :city, :state, :zip,  :skip_mail, :addressee, :greeting)
     end 
 
     def update_primary_address

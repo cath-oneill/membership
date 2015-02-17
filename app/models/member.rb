@@ -4,7 +4,7 @@ class Member < ActiveRecord::Base
   has_many :addresses
   has_one  :primary_address, :class_name => "Address"
 
-  delegate :address, :address2, :city, :state, :zip, :skip_mail, to: :primary_address, allow_nil: true
+  delegate :address1, :address2, :city, :state, :zip, :skip_mail, to: :primary_address, allow_nil: true
 
   validates :first_name, :last_name, :presence => true
 
@@ -85,12 +85,12 @@ class Member < ActiveRecord::Base
 
   def self.export_mailing_csv
     CSV.generate do |csv|
-      columns = ["addressee", "address", "address2",  "city", "state", "zip", "greeting"]
+      columns = ["addressee", "address1", "address2",  "city", "state", "zip", "greeting"]
       csv << columns
       all.each do |member|
         member.addresses.each do |add|
           next if add.skip_mail == true
-          information = add.attributes.values_at("address", "address2",  "city", "state", "zip")
+          information = add.attributes.values_at("address1", "address2",  "city", "state", "zip")
           information.unshift(add.calculated_addressee)
           information.push(add.calculated_greeting)
           csv << information

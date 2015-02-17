@@ -11,13 +11,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150215232219) do
+ActiveRecord::Schema.define(version: 20150217124713) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "addresses", force: true do |t|
-    t.string   "address"
     t.string   "address2"
     t.string   "city"
     t.string   "state"
@@ -29,6 +28,7 @@ ActiveRecord::Schema.define(version: 20150215232219) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "number"
+    t.string   "address1"
   end
 
   add_index "addresses", ["member_id"], name: "index_addresses_on_member_id", using: :btree

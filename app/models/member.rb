@@ -74,17 +74,30 @@ class Member < ActiveRecord::Base
     tagged_with(tag)
   }
 
-  def self.to_csv
+  def self.export_members_csv
     CSV.generate do |csv|
-      csv << (column_names + ["calculated_mail_name", "calculated_greeting"])
+      csv << (column_names)
       all.each do |member|
-        information = member.attributes.values_at(*column_names)
-        information << member.calculated_mail_name
-        information << member.calculated_greeting
-        csv << information
+        csv << member.attributes.values_at(*column_names)
       end
     end
   end
+
+  def self.export_mailing_csv
+    CSV.generate do |csv|
+      columns = ["addressee", "address", "address2",  "city", "state", "zip", "greeting"]
+      csv << columns
+      all.each do |member|
+        member.addresses.each do |add|
+          next if add.skip_mail == true
+          information = add.attributes.values_at("address", "address2",  "city", "state", "zip")
+          information.unshift(add.calculated_addressee)
+          information.push(add.calculated_greeting)
+          csv << information
+        end
+      end
+    end    
+  end  
 
   def self.import_new(file)
     not_created = []

@@ -38,7 +38,8 @@
   </div>
   <div class="right">
       <%= link_to('Reset filters', reset_filterrific_url, class: "button round tiny info button-down") %>
-      <%= link_to 'Export As CSV', url_options = {action: "index", format: "csv"}, html_options = {class: "button round tiny success button-down"} %>
+      <%= link_to 'Export Members CSV', members_path(format: :csv, csv: "export_members_csv"), html_options = {class: "button round tiny success button-down"} %>
+      <%= link_to 'Export Mailing CSV', members_path(format: :csv, csv: "export_mailing_csv"), html_options = {class: "button round tiny success button-down"} %>      
   </div>
   <%= render_filterrific_spinner %>
 <% end %>

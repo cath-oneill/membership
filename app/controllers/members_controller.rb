@@ -3,24 +3,34 @@ class MembersController < ApplicationController
 
   # GET /members
   # GET /members.json
-  def index
+  def index   
     @filterrific = initialize_filterrific(
-      Member,
-      params[:filterrific],
-      :select_options => {
-        sorted_by:    Member.options_for_sorted_by,
-        zip_select:   Member.options_for_zip_select,
-        mail_select:  Member.options_for_mail_select,
-        tag_select:   Member.options_for_tag_select
-      }) or return
+        Member,
+        params[:filterrific],
+        :select_options => {
+          sorted_by:    Member.options_for_sorted_by,
+          zip_select:   Member.options_for_zip_select,
+          mail_select:  Member.options_for_mail_select,
+          tag_select:   Member.options_for_tag_select
+        }) or return  
     @members = @filterrific.find.page(params[:page])
-    @members_for_csv = @filterrific.find
-
 
     respond_to do |format|
       format.html
       format.js
-      format.csv {render text: @members_for_csv.to_csv}
+      format.csv {
+        if params[:csv] == "export_members_csv"
+          @members_for_csv = @filterrific.find
+          send_data(@members_for_csv.export_members_csv,
+            type: 'text/csv', disposition: 'attachment', 
+            filename: "members_#{Time.now.to_i}.csv")
+        elsif params[:csv] == "export_mailing_csv"
+          @members_for_csv = @filterrific.find
+          send_data(@members_for_csv.export_mailing_csv,
+            type: 'text/csv', disposition: 'attachment', 
+            filename: "mailing_#{Time.now.to_i}.csv")
+        end
+      }
     end
 
   rescue ActiveRecord::RecordNotFound => e

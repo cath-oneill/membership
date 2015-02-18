@@ -23,19 +23,24 @@ class Address < ActiveRecord::Base
     CSV.generate do |csv|
       csv << (["address", "zip", "member"])
       duplicated_addresses.each do |duplicate|
-        Address.where(number: duplicate.number, zip: duplicate.zip).find_each do |address|
-          csv << [address.address1, address.zip, Member.get_name_by_id(address.member_id)]
+        next if duplicate[0].nil? || duplicate[1].nil?
+        Address.where(number: duplicate[0], zip: duplicate[1]).find_each do |add|
+          csv << [add.address1, add.zip, Member.get_name_by_id(add.member_id)]
         end
       end
     end
   end
 
   def self.duplicated_addresses
-    where.not(address1: [nil, ""]).select([:number, :zip]).group([:number, :zip]).having("count(*) > 1")
+    select([:number, :zip]).group([:number, :zip]).having("count(*) > 1").map{|dup| [dup.number, dup.zip]}
   end
 
   private
   def update_number
+    if address1.nil?
+      self.number = nil
+      return
+    end
     self.number = address1[/\d+/].to_i
   end
 

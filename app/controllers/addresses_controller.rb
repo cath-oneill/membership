@@ -36,9 +36,10 @@ class AddressesController < ApplicationController
   end
 
   def duplicate_address_report
-    @duplicates = Address.duplicated_addresses
     respond_to do |format|
-      format.csv {render text: @duplicates.duplicated_address_csv}
+      format.csv {send_data(Address.duplicated_address_csv,
+            type: 'text/csv', disposition: 'attachment', 
+            filename: "duplicate_addresses_#{Time.now.to_i}.csv")}
     end
   end  
 

@@ -166,4 +166,32 @@ class Payment < ActiveRecord::Base
       Member.update(member_id, {dues_paid: date})
     end
   end
+
+  def self.import_update(file)
+    not_updated =[]
+    headers = CSV.read(file.path)[0]
+
+    unless headers.include?("id")
+      raise "Import Cancelled: Incorrect Required Headers"
+    end
+
+    CSV.foreach(file.path, headers: true) do |row|
+      
+      payment_hash = row.to_hash
+      if payment_hash["id"].nil?
+        not_updated << "row missing required id number"
+        next
+      end        
+      
+      payment = Payment.where(id: payment_hash["id"])
+
+      if payment.length == 1
+        payment_hash.delete("member_name")
+        payment.first.update(payment_hash)
+      else
+        not_updated << "cannot find payment - ID #{payment_hash["id"]}"
+      end
+    end # end CSV.foreach
+    return not_updated
+  end # end self.import(file)
 end

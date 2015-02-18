@@ -22,7 +22,7 @@ Rails.application.routes.draw do
   end
 
   resources :payments, only: [:index] do
-    collection { post :import_new }
+    collection { post :import_new, :import_update }
   end
 
   resources :settings, only: [:index, :update]

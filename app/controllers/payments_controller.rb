@@ -17,7 +17,9 @@ class PaymentsController < ApplicationController
     respond_to do |format|
       format.html
       format.js
-      format.csv {render text: @payments_for_csv.to_csv}
+      format.csv {send_data(@payments_for_csv.to_csv,
+            type: 'text/csv', disposition: 'attachment', 
+            filename: "payments_#{Time.now.to_i}.csv")}
     end
 
   rescue ActiveRecord::RecordNotFound => e
@@ -71,6 +73,16 @@ class PaymentsController < ApplicationController
   rescue Exception => e
       redirect_to payments_path, alert: e 
   end  
+
+  def import_update
+    response = Payment.import_update(params[:file])
+    if response.empty?
+      redirect_to payments_path, notice: "All rows imported and updated."
+    else 
+      redirect_to payments_path, alert: "#{response.length} rows rejected: #{response.join(", ")}"
+    end  
+  end
+
 
   private
     # Use callbacks to share common setup or constraints between actions.

@@ -66,3 +66,12 @@
     <%= submit_tag "Import CSV", class: "button small success radius" %>
   <% end %>
 </div>
+
+<div class="small-12 columns medium-6">
+<h3>Import CSV to UPDATE Paymentss</h3>
+<p><strong>Instructions:</strong> Export csv above and update fields for payments that you want to update.  DO NOT CHANGE THE ID COLUMN. Then import here.</p>
+  <%= form_tag import_update_payments_path, multipart: true do %>
+    <%= file_field_tag :file, required: :true %>
+    <%= submit_tag "Import CSV", class: "button small success radius" %>
+  <% end %>
+</div>

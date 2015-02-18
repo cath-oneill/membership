@@ -184,11 +184,16 @@ class Member < ActiveRecord::Base
   end
 
   def full_name
-    ([first_name, middle_name, last_name] - [nil, ""]).join(" ")
+    ([first_name, middle_initial, last_name] - [nil, ""]).join(" ")
   end
 
   def name_with_title
-    ([title, first_name, last_name] - [nil, ""]).join(" ")
+    ([title, first_name, middle_initial, last_name] - [nil, ""]).join(" ")
+  end
+
+  def middle_initial
+    return nil if middle_name.nil?
+    middle_name[0] + "."
   end
 
   def self.get_name_by_id(id)

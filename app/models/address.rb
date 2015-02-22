@@ -31,7 +31,7 @@ class Address < ActiveRecord::Base
       csv << (["address", "zip", "member"])
       duplicated_addresses.each do |duplicate|
         next if duplicate[0].nil? || duplicate[1].nil?
-        addresses = Address.where(number: duplicate[0], zip: duplicate[1], skip_mail: false)
+        addresses = Address.where(number: duplicate[0], zip: duplicate[1], skip_mail: [false, nil])
         next unless addresses.count >= 2 #do not include duplicated addresses unless 2 or more receive mail
         addresses.find_each do |add|
           csv << [add.address1, add.zip, Member.get_name_by_id(add.member_id)]

@@ -27,10 +27,17 @@
 
   <% unless @member.tag_list.empty? %>
   <p>
-    <strong>Clubs:</strong>
+    <strong>Tags:</strong>
     <%= combine_with_commas(@member.tag_list) %>
   </p>
   <% end %>
+
+  <% unless @member.dues_paid.nil? %>
+  <p>
+    <strong>Dues Last Paid:</strong>
+    <%= @member.dues_paid %>
+  </p>
+  <% end %>  
   </div>
 
   <% if @member.addresses.present? %>

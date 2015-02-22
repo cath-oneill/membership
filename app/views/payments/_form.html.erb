@@ -14,8 +14,8 @@
   <% end %>
 
     <div class="field columns small-6 medium-4">
-      <%= f.label :date %><br>
-      <%= f.date_field :date, required: true %>
+      <%= f.label :date, "Payment Date" %><br>
+      <%= f.date_field :date, required: true, value: Time.now.strftime('%Y-%m-%d') %>
     </div>
     <div class="field columns small-6 medium-4">
       <%= f.label :amount %><br>

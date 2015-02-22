@@ -20,7 +20,7 @@
   </div>
   <div class="field small-12 columns medium-4">
     <%= f.label :date %><br>
-    <%= f.date_field :date, required: true %>
+    <%= f.date_field :date, required: true, value: Time.now.strftime('%Y-%m-%d') %>
   </div>
   <div class="actions columns small-12">
     <%= f.submit class: "button radius success" %>

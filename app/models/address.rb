@@ -19,12 +19,21 @@ class Address < ActiveRecord::Base
     end
   end
 
+
+  def primary?
+    return false if member_id.nil? #needed for creation of new addresses
+    return true  if id == member.primary_address_id
+    false
+  end  
+
   def self.duplicated_address_csv
     CSV.generate do |csv|
       csv << (["address", "zip", "member"])
       duplicated_addresses.each do |duplicate|
         next if duplicate[0].nil? || duplicate[1].nil?
-        Address.where(number: duplicate[0], zip: duplicate[1]).find_each do |add|
+        addresses = Address.where(number: duplicate[0], zip: duplicate[1], skip_mail: false)
+        next unless addresses.count >= 2 #do not include duplicated addresses unless 2 or more receive mail
+        addresses.find_each do |add|
           csv << [add.address1, add.zip, Member.get_name_by_id(add.member_id)]
         end
       end

@@ -73,8 +73,8 @@
           <label for="primary" class="right">Primary Address</label>  
         </div>
         <div class="small-4 columns end">
-          <% if @member.primary_address_id == @address.id %>
-            <%= check_box_tag :primary, {checked: true} %>
+          <% if @address.primary? %>
+            <%= check_box_tag :primary, "Primary", true %>
           <% else %>
             <%= check_box_tag :primary %>
           <% end %>

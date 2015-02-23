@@ -13,7 +13,7 @@
 
   <div class="row">
     <div class="columns small-12 medium-6 large-4 border-right" >
-      <h5>Member Information - Required</h5>
+      <h5>Required Member Information</h5>
       <div class="field row">
         <div class="small-4 columns">
           <%= f.label :first_name, class: "right"%><br>
@@ -40,12 +40,20 @@
       </div>   
       <div class="field row">
         <div class="small-4 columns">
-          <%= f.label :tag_list, "Tags (separated by commas)", class: "right"%><br>
+          <%= f.label :employer, class: "right"%><br>
         </div>
         <div class="small-8 columns end">
-          <%= f.text_field :tag_list %>       
+          <%= f.text_field :employer, :required => true %>
         </div>
-      </div>   
+      </div>
+      <div class="field row">
+        <div class="small-4 columns">
+          <%= f.label :occupation, class: "right"%><br>
+        </div>
+        <div class="small-8 columns end">
+          <%= f.text_field :occupation, :required => true %>
+        </div>
+      </div>        
     </div>
 
     <div class="columns small-12 medium-6 large-4">
@@ -93,23 +101,25 @@
     </div>
 
     <div class="columns small-12 medium-6 large-4">
-      <h5>Legally Required<br>Employment Information</h5>
+      <h5>Optional Information</h5>
       <div class="field row">
         <div class="small-4 columns">
-          <%= f.label :employer, class: "right"%><br>
+          <%= f.label :tag_list, class: "right"%><br>
         </div>
         <div class="small-8 columns end">
-          <%= f.text_field :employer, :required => true %>
+          <%= f.text_field :tag_list %>       
+          <p>Enter tags separated by commas.</p>
         </div>
-      </div>
+      </div> 
       <div class="field row">
         <div class="small-4 columns">
-          <%= f.label :occupation, class: "right"%><br>
+          <%= f.label :dues_paid, class: "right"%><br>
         </div>
         <div class="small-8 columns end">
-          <%= f.text_field :occupation, :required => true %>
+          <%= f.date_field :dues_paid %>
+          <p>Will override the automatic calculation of dues paid date.</p>     
         </div>
-      </div>
+      </div> 
       <br><br>   
       <div class="actions row">
         <%= f.submit class: "button radius success right" %>

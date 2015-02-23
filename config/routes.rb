@@ -12,6 +12,7 @@ Rails.application.routes.draw do
   
   resources :members, except: [:destroy] do
     collection { post :import_new, :import_update }
+    member     { post :tag }
     resources :payments, only: [:new, :create, :edit, :update, :destroy]
     resources :notes, only: [:new, :create, :edit, :update]
     resources :addresses, only: [:new, :create, :edit, :update]  

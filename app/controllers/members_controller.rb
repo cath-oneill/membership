@@ -1,5 +1,5 @@
 class MembersController < ApplicationController
-  before_action :set_member, only: [:show, :edit, :update]
+  before_action :set_member, only: [:show, :edit, :update, :tag]
 
   # GET /members
   # GET /members.json
@@ -73,6 +73,7 @@ class MembersController < ApplicationController
   # PATCH/PUT /members/1.json
   def update
     @member.tag_list = member_tag_params["tag_list"] 
+    @member.tag_list.add(tag_params)
     @member.attributes = member_params
     respond_to do |format|
       if @member.save
@@ -83,6 +84,16 @@ class MembersController < ApplicationController
         format.json { render json: @member.errors, status: :unprocessable_entity }
       end
     end
+  end
+
+  def tag
+    if @member.tag_list.include?(tag_params)
+      @member.tag_list.remove(tag_params)
+    else
+      @member.tag_list.add(tag_params)
+    end
+    @member.save!  
+    redirect_to member_path(@member) 
   end
 
   def import_new
@@ -111,6 +122,9 @@ class MembersController < ApplicationController
       @member = Member.find(params[:id])
     end
 
+    def tag_params
+      params[:tag]
+    end
     # Never trust parameters from the scary internet, only allow the white list through.
     def member_params
       params.require(:member).permit(:first_name, :last_name, :email, :email2, :cell_phone, :home_phone, :work_phone, :employer, :occupation, :title, :dues_paid)

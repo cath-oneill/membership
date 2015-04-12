@@ -101,19 +101,10 @@ class MembersController < ApplicationController
     if response.empty?
       redirect_to members_path, notice: "All rows imported and created."
     else 
-      redirect_to members_path, alert: "#{response.length} rows rejected: #{response.join(", ")}"
+      redirect_to members_path, alert: "#{response.length} rows rejected: #{response.join(" | ")}"
     end  
   rescue Exception => e
-      redirect_to payments_path, alert: e 
-  end
-
-  def import_update
-    response = Member.import_update(params[:file])
-    if response.empty?
-      redirect_to members_path, notice: "All rows imported and updated."
-    else 
-      redirect_to members_path, alert: "#{response.length} rows rejected: #{response.join(", ")}"
-    end  
+      redirect_to members_path, alert: e 
   end
 
   private

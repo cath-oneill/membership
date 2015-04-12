@@ -1,0 +1,4 @@
+first_name, last_name, address1, address2, city, state, zip, email, email2, cell_phone, home_phone, work_phone, employer, occupation, dues_paid, skip_mail, greeting, addressee, middle_name,tags,note
+Fuzzy,Wuzzy, 123 Main St.,,Austin,TX,78701,fuzzy@gmail.com,,512-555-5555,,,City of Austin,Bear,,,,,,"bear, sponsor2015","Fuzzy Wuzzy was a bear."
+Fuzzy,, 123 Main St.,,Austin,TX,78701,fuzzy@gmail.com,,512-555-5555,,,City of Austin,Bear,,,,,,"bear, sponsor2015","Fuzzy Wuzzy was a bear."
+Ken,Craig, 123 Main St.,,Austin,TX,78701,fuzzy@gmail.com,,512-555-5555,,,City of Austin,Bear,,,,,,"bear, sponsor2015","Fuzzy Wuzzy was a bear."

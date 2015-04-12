@@ -1,7 +1,11 @@
 class Member < ActiveRecord::Base
-  has_many :payments
-  has_many :notes
-  has_many :addresses
+
+  include Member::Export 
+  include Member::Import
+
+  has_many :payments,   dependent: :destroy
+  has_many :notes,      dependent: :destroy
+  has_many :addresses,  dependent: :destroy
   has_one  :primary_address, :class_name => "Address"
 
   delegate :address1, :address2, :city, :state, :zip, :skip_mail, to: :primary_address, allow_nil: true
@@ -74,88 +78,6 @@ class Member < ActiveRecord::Base
     tagged_with(tag)
   }
 
-  def self.export_members_csv
-    CSV.generate do |csv|
-      csv << (column_names)
-      all.each do |member|
-        csv << member.attributes.values_at(*column_names)
-      end
-    end
-  end
-
-  def self.export_mailing_csv
-    CSV.generate do |csv|
-      columns = ["addressee", "address1", "address2",  "city", "state", "zip", "greeting"]
-      csv << columns
-      all.each do |member|
-        member.addresses.each do |add|
-          next if add.skip_mail == true
-          information = add.attributes.values_at("address1", "address2",  "city", "state", "zip")
-          information.unshift(add.calculated_addressee)
-          information.push(add.calculated_greeting)
-          csv << information
-        end
-      end
-    end    
-  end  
-
-  def self.import_new(file)
-    not_created = []
-    headers = CSV.read(file.path)[0]
-
-    unless headers.include?("first_name") && headers.include?("last_name")
-      raise "Import Cancelled: Incorrect Required Headers"
-    end
-
-    CSV.foreach(file.path, headers: true) do |row|
-
-      member_hash = row.to_hash 
-      if member_hash["first_name"].nil? || member_hash["last_name"].nil?
-        not_created << "row missing required first_name and last_name"
-        next
-      end
-
-      member = Member.where(first_name: member_hash["first_name"], last_name: member_hash["last_name"])
-
-      if member.empty?
-        member_attributes  =  member_hash.select{|k, v| Member.columns.map(&:name).include?(k)}
-        address_attributes =  member_hash.select{|k, v| Address.columns.map(&:name).include?(k)}
-        new_member                 = Member.create!(member_attributes)
-        new_member.primary_address = Address.create!(address_attributes)
-        new_member.update(primary_address_id: new_member.primary_address.id)
-      else
-        not_created << "member already exists - #{member_hash["first_name"]} #{member_hash["last_name"]}"
-      end
-    end # end CSV.foreach
-    return not_created
-  end # end self.import(file)
-
-  def self.import_update(file)
-    not_updated =[]
-    headers = CSV.read(file.path)[0]
-
-    unless headers.include?("id")
-      raise "Import Cancelled: Incorrect Required Headers"
-    end
-
-    CSV.foreach(file.path, headers: true) do |row|
-      
-      member_hash = row.to_hash 
-      if member_hash["id"].nil?
-        not_updated << "row missing required id number"
-        next
-      end        
-      
-      member = Member.where(id: member_hash["id"])
-
-      if member.length == 1
-        member.first.update(member_hash)
-      else
-        not_updated << "cannot find member - #{member_hash["first_name"]} #{member_hash["last_name"]}"
-      end
-    end # end CSV.foreach
-    return not_updated
-  end # end self.import(file)
 
   def self.options_for_zip_select
     joins(:primary_address).pluck(:zip).uniq.delete_if{|x| x.nil? || x.empty?}.sort.map { |e| [e, e] }
@@ -201,10 +123,6 @@ class Member < ActiveRecord::Base
   end
 
   private 
-  def set_date(date_string)
-    return Date.today if date_string.nil?
-    Date.parse(date_string)
-  end  
 
   def check_for_duplicate_member
     first, middle, last, i = first_name, middle_name, last_name, id

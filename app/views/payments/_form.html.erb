@@ -15,21 +15,19 @@
 
     <div class="field columns small-6 medium-4">
       <%= f.label :date, "Payment Date" %><br>
-      <%= f.date_field :date, required: true, value: Time.now.strftime('%Y-%m-%d') %>
+      <%= f.date_field :date, required: true %>
     </div>
     <div class="field columns small-6 medium-4">
       <%= f.label :amount %><br>
       <%= f.text_field :amount, required: true %>
     </div>    
-    <div class = "field columns small-6 medium-4">
-      <%= f.label :dues %><br>
-      <%= f.select :dues, options_for_select([
-          ["Dues Payment", true],
-          ["Non-Dues Payment", false] ]), required: true %>    
-    </div>
     <div class="field columns small-6 medium-4">
       <%= f.label :kind %><br>
       <%= f.select :kind, options_for_select(payment_kinds), required: true %>
+    </div>
+    <div class = "field columns small-6 medium-4"><br>
+      <%= f.check_box :dues, placeholder: true %> 
+      <%= f.label :dues, 'Dues Payment?' %>
     </div>
     <div class="field columns small-6 medium-4">
       <%= f.label :deposit_date %><br>

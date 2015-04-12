@@ -113,6 +113,14 @@ class Member < ActiveRecord::Base
     ([title, first_name, middle_initial, last_name] - [nil, ""]).join(" ")
   end
 
+  def greeting
+    primary_address.calculated_greeting
+  end
+
+  def addressee
+    primary_address.calculated_greeting
+  end
+
   def middle_initial
     return nil if middle_name.nil?
     middle_name[0] + "."

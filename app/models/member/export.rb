@@ -21,9 +21,12 @@ module Member::Export
 
     def export_members_csv
       CSV.generate do |csv|
-        csv << (column_names)
+        columns = %w(id first_name middle_name last_name email email2 home_phone 
+          cell_phone work_phone employer occupation created_at dues_paid addressee 
+          address1 address2 city state zip greeting)
+        csv << columns
         all.each do |member|
-          csv << member.attributes.values_at(*column_names)
+          csv << columns.map{|c| member.send(c)}
         end
       end
     end

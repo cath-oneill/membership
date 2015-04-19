@@ -162,6 +162,7 @@ class Payment < ActiveRecord::Base
   end
 
   def update_member_dues_paid
+    return unless dues
     if member.dues_paid.nil? || date > member.dues_paid 
       Member.update(member_id, {dues_paid: date})
     end

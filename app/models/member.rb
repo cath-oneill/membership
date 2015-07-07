@@ -114,11 +114,11 @@ class Member < ActiveRecord::Base
   end
 
   def greeting
-    primary_address.calculated_greeting
+    primary_address.try(:calculated_greeting)
   end
 
   def addressee
-    primary_address.calculated_greeting
+    primary_address.try(:calculated_addressee)
   end
 
   def middle_initial

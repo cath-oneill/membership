@@ -27,7 +27,7 @@ module Member::Import
     private
 
     def member_already_exists?(member_hash)
-      Member.where("LOWER(first_name) = ?", member_hash["first_name"].downcase).where("LOWER(last_name) = ?", member_hash["last_name"].downcase).exists?
+      Member.where{(first_name =~ "%#{member_hash['first_name']}%") & (last_name =~ "#{member_hash['last_name']}%")}.exists?
     end
 
     def create_member(member_hash)

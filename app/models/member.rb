@@ -1,6 +1,6 @@
 class Member < ActiveRecord::Base
 
-  include Member::Export 
+  include Member::Export
   include Member::Import
 
   has_many :payments,   dependent: :destroy
@@ -36,9 +36,9 @@ class Member < ActiveRecord::Base
     direction = (sort_option =~ /desc$/) ? :desc : :asc
     case sort_option.to_s
     when /^zip_/
-      joins{primary_address.outer}.order("zip #{direction} NULLS LAST") 
+      joins{primary_address.outer}.order("zip #{direction} NULLS LAST")
     when /^dues_/
-      order("dues_paid #{direction} NULLS LAST") 
+      order("dues_paid #{direction} NULLS LAST")
     when /^name_/
       order(last_name: direction)
     else
@@ -68,11 +68,11 @@ class Member < ActiveRecord::Base
     when "greeting"
       uniq.joins(:addresses).where{(addresses.greeting != nil) & (addresses.greeting != "")}
     when "addressee"
-      uniq.joins(:addresses).where{(addresses.addressee != nil) & (addresses.addressee != "")}  
+      uniq.joins(:addresses).where{(addresses.addressee != nil) & (addresses.addressee != "")}
     else
       raise(ArgumentError, "Invalid sort option: #{ sort_option.inspect }")
     end
-  }  
+  }
 
   scope :tag_select, lambda {|tag|
     tagged_with(tag)
@@ -91,7 +91,7 @@ class Member < ActiveRecord::Base
       ['Dues Last Paid (newest first)', 'dues_desc'],
       ['Zip Code', 'zip_asc'],
     ]
-  end  
+  end
 
   def self.options_for_mail_select
     [
@@ -99,7 +99,7 @@ class Member < ActiveRecord::Base
       ['Custom Addressee', 'addressee'],
       ['Custom Greeting', 'greeting'],
     ]
-  end  
+  end
 
   def self.options_for_tag_select
     ActsAsTaggableOn::Tag.all.map { |tag| [tag.name, tag.name] }
@@ -130,15 +130,10 @@ class Member < ActiveRecord::Base
     Member.find(id).full_name
   end
 
-  private 
-
   def check_for_duplicate_member
-    first, middle, last, i = first_name, middle_name, last_name, id
-    if middle.blank? && Member.where{(first_name =~ "%#{first}%") & (last_name =~ "#{last}%") & (id != i)}.present?
+    first, last = first_name, last_name
+    if Member.where{(first_name =~ "%#{first}%") & (last_name =~ "#{last}%")}.count > 1
       errors.add("Another member of same name")
-      return false
-    elsif Member.where{(first_name =~ "%#{first}%") & (middle_name =~ "%#{middle}%") & (last_name =~ "#{last}%") & (id != i)}.present?
-      errors.add("Another member of same name") 
       return false
     else
       return true

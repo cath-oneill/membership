@@ -3,7 +3,7 @@ module Member::Import
 
   include Importable
 
-  module ClassMethods  
+  module ClassMethods
 
     def import_new(file)
       not_created = []
@@ -27,8 +27,7 @@ module Member::Import
     private
 
     def member_already_exists?(member_hash)
-      member = Member.where(first_name: member_hash["first_name"], last_name: member_hash["last_name"])
-      member.present?
+      Member.where("LOWER(first_name) = ?", member_hash["first_name"].downcase).where("LOWER(last_name) = ?", member_hash["last_name"].downcase).exists?
     end
 
     def create_member(member_hash)
@@ -40,7 +39,7 @@ module Member::Import
       new_member.primary_address = Address.create!(address_attributes)
       Note.create!(date: Date.today, content: note, member_id: new_member.id) unless member_hash["note"].nil?
       new_member.update(primary_address_id: new_member.primary_address.id)
-      new_member.tag_list.add(tags) unless member_hash["tags"].nil?      
+      new_member.tag_list.add(tags) unless member_hash["tags"].nil?
     end
 
   end

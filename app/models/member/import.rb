@@ -21,7 +21,7 @@ module Member::Import
           not_created << "Row #{$.} missing required information: first name or last name."
         end # end hash_has_require_fields?
       end # end CSV.foreach
-      return not_created
+      return not_created.first(15)
     end # end self.import(file)
 
     private

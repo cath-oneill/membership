@@ -103,7 +103,7 @@ class Payment < ActiveRecord::Base
     headers = CSV.read(file.path)[0]
 
     unless headers.include?("amount") && headers.include?("date") && headers.include?("member_first_name") && headers.include?("member_last_name")
-      raise "Import Cancelled: Incorrect Required Headers"
+      raise "Import Cancelled: Incorrect Required Headers - Imported Headers: #{headers.inspect}"
     end
 
     CSV.foreach(file.path, headers: true) do |row|
